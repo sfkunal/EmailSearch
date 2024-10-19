@@ -8,9 +8,7 @@ const Modal = ({ isOpen, onClose, content }) => {
       <div className="modal-content">
         <button onClick={onClose}>x</button>
         <h2>{content.subject}</h2>
-        <p>To: {content.to}</p>
-        <p>From: {content.from}</p>
-        <p>Body:</p>
+        <p>{content.from}</p>
         <pre>{content.body}</pre>
       </div>
     </div>
