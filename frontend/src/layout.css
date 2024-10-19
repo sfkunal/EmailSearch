@@ -6,7 +6,7 @@ html, body {
     height: 100%;
     overflow-x: hidden;
   }
-  
+
   .App {
     background-image: url('images/background.jpg');
     background-size: cover;
@@ -18,7 +18,7 @@ html, body {
     top: 0;
     left: 0;
   }
-  
+
   .MainPage {
     position: relative;
     z-index: 1;
@@ -27,7 +27,7 @@ html, body {
     padding: 20px;
     text-align: center;
   }
-  
+
 .SearchBar {
     background-color: rgba(224, 224, 224, 0.6);
     backdrop-filter: blur(10px);
@@ -39,7 +39,7 @@ html, body {
     display: flex;
     align-items: center;
   }
-  
+
   .SearchBar input[type="text"] {
     width: 100%;
     padding: 10px;
@@ -48,17 +48,20 @@ html, body {
     font-family: inherit;
     font-size: inherit;
     margin-right: 10px;
+    background-color: transparent;
+    outline: none;
+    box-shadow: 0 0 0 0;
   }
-  
+
   .SearchBar button {
     background-color: #1976d2;
     color: white;
     border: none;
     padding: 10px 20px;
-    border-radius: 0px;
+    border-radius: 12px;
     cursor: pointer;
   }
-  
+
   .SearchBar button:hover {
     background-color: #1565c0;
   }

@@ -18,30 +18,44 @@ const SearchBar = ({ searchResults, setSearchResults }) => {
     event.preventDefault();
     const result = await queryEmails(searchQuery);
     setSearchResults(result);
-
+    
     // const data = result?.metadatas;
     console.log("received data: ", result);
-    // setSearchResults(data);
   };
 
   const handleChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleClick(e);
+  };
+
   return (
-    <div className="SearchBar">
-      <TextField
-          id="search-bar"
+    <form className="SearchBar" onSubmit={handleSubmit}>
+      <input
+        type="text"
           value={searchQuery}
           onChange={handleChange}
-          label="How can I help you?"
-          variant="outlined"
           placeholder="Search Mail"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSubmit(e);
+            }
+          }}
       />
-      <Button variant="contained" color="primary" onClick={handleClick}>
-        Submit
-      </Button>
-    </div>
+      <button type="submit" style={{
+        backgroundColor: "#64758d",
+        color: "white",
+        border: "none",
+        padding: "10px 20px",
+        borderRadius: "12px",
+        cursor: "pointer",
+      }}>
+        Search
+      </button>
+    </form>
   );
 };
 
