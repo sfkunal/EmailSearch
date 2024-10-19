@@ -28,7 +28,6 @@ collection = client.create_collection(
     embedding_function=embedder,
 )
 
-
 client = Groq(
     api_key=GROQ_API_KEY,
 )
