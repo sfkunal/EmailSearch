@@ -1,0 +1,110 @@
+[
+{
+    "from": "alice.jones@company.com",
+    "to": "bob.smith@company.com",
+    "subject": "Team Stand-Up: Weekly Update - 10/23/2024",
+    "body": "Hi Bob, \n\nOur weekly team stand-up will take place on Zoom this Thursday at 9:30 AM. Please prepare your status update and any blockers.\n\nZoom Link: https://zoom.us/j/2345678910\n\nBest, \nAlice"
+},
+{
+    "from": "hr@startupinc.com",
+    "to": "all@startupinc.com",
+    "subject": "Mandatory All-Hands Meeting - 10/20/2024",
+    "body": "Hi Everyone, \n\nWe will have an all-hands meeting on Monday, 10/20/2024, at 10:00 AM. Attendance is mandatory.\n\nLocation: Conference Room A\nAgenda: Company Q3 Performance Review\n\nBest, \nHR"
+},
+{
+    "from": "prof.brown@university.edu",
+    "to": "students@university.edu",
+    "subject": "Office Hours Adjustment - Week of 10/25/2024",
+    "body": "Dear Students, \n\nMy office hours for the week of 10/25 will be adjusted. New timing: \n\nTuesday: 1:00 PM - 3:00 PM \nFriday: 2:00 PM - 4:00 PM\n\nApologies for any inconvenience.\n\nBest, \nProf. Brown"
+},
+{
+    "from": "nina.k@consulting.com",
+    "to": "project.team@consulting.com",
+    "subject": "Meeting Rescheduled to 11/3/2024",
+    "body": "Hi Team, \n\nDue to conflicting schedules, our project meeting is rescheduled to 11/3/2024 at 3:00 PM. \n\nLet me know if you have any questions.\n\nBest, \nNina"
+},
+{
+    "from": "mike.taylor@financeco.com",
+    "to": "team@financeco.com",
+    "subject": "Quarterly Strategy Review - 10/30/2024",
+    "body": "Hi Team, \n\nOur quarterly strategy review will take place on 10/30/2024 at 11:00 AM in the main conference room.\n\nAgenda: \n- Performance Metrics \n- Strategy Updates \n- Q&A\n\nLooking forward to a productive session.\n\nThanks, \nMike"
+},
+{
+    "from": "susan.lee@lawfirm.com",
+    "to": "legal.team@lawfirm.com",
+    "subject": "Case Review Meeting - 10/22/2024",
+    "body": "Hi Team, \n\nPlease join the case review meeting on 10/22/2024 at 2:00 PM in Meeting Room B.\n\nBest, \nSusan"
+},
+{
+    "from": "mark.j@startup.com",
+    "to": "product.team@startup.com",
+    "subject": "Design Sprint Kickoff - 11/1/2024",
+    "body": "Hello Team, \n\nThe design sprint will kick off on 11/1/2024 at 9:00 AM in the Innovation Hub.\n\nSee you all there!\n\nRegards, \nMark"
+},
+{
+    "from": "events@university.edu",
+    "to": "students@university.edu",
+    "subject": "Career Fair - 10/25/2024",
+    "body": "Dear Students, \n\nThe annual career fair will be held on 10/25/2024 from 10:00 AM to 4:00 PM at the Student Center.\n\nBest, \nUniversity Events"
+},
+{
+    "from": "jane.kim@ngo.org",
+    "to": "volunteers@ngo.org",
+    "subject": "Volunteer Orientation Session - 10/21/2024",
+    "body": "Hi Volunteers, \n\nOur orientation session will be on 10/21/2024 at 5:00 PM. Please attend to receive important project information.\n\nBest, \nJane"
+},
+{
+    "from": "john.m@agency.com",
+    "to": "marketing@agency.com",
+    "subject": "Brainstorming Session - 10/19/2024",
+    "body": "Hi Team, \n\nPlease join the brainstorming session on 10/19/2024 at 10:00 AM in the lounge.\n\nThanks, \nJohn"
+},
+{
+    "from": "admin@techstartup.com",
+    "to": "founders@techstartup.com",
+    "subject": "Board Meeting - 10/28/2024",
+    "body": "Hello Founders, \n\nOur next board meeting is scheduled for 10/28/2024 at 3:00 PM. Please come prepared with your presentations.\n\nBest, \nAdmin"
+},
+{
+    "from": "rachel.p@researchlab.edu",
+    "to": "lab@researchlab.edu",
+    "subject": "Weekly Lab Meeting - 10/18/2024",
+    "body": "Hi Everyone, \n\nDon't forget our weekly lab meeting at 2:00 PM today in the main lab.\n\nRegards, \nRachel"
+},
+{
+    "from": "logistics@travelagency.com",
+    "to": "clients@travelagency.com",
+    "subject": "Trip Itinerary - 10/23/2024",
+    "body": "Dear Clients, \n\nHere is your itinerary for the upcoming trip on 10/23/2024. Safe travels!\n\nBest, \nLogistics Team"
+},
+{
+    "from": "workshop@designschool.edu",
+    "to": "attendees@designschool.edu",
+    "subject": "Workshop Details - 10/27/2024",
+    "body": "Hi Everyone, \n\nThe workshop will be held on 10/27/2024 at 10:00 AM. Please bring your materials.\n\nBest, \nWorkshop Coordinator"
+},
+{
+    "from": "support@techcompany.com",
+    "to": "customers@techcompany.com",
+    "subject": "System Maintenance - 10/20/2024",
+    "body": "Dear Customers, \n\nScheduled maintenance will occur on 10/20/2024 from 12:00 AM to 2:00 AM. Apologies for any inconvenience.\n\nBest, \nSupport Team"
+},
+{
+    "from": "faculty@university.edu",
+    "to": "students@university.edu",
+    "subject": "Guest Lecture Announcement - 10/24/2024",
+    "body": "Dear Students, \n\nJoin us for a guest lecture on 'Artificial Intelligence and Ethics' on 10/24/2024 at 3:00 PM in Hall 2.\n\nBest, \nFaculty"
+},
+{
+    "from": "conference@eventplanner.com",
+    "to": "speakers@eventplanner.com",
+    "subject": "Conference Agenda - 11/5/2024",
+    "body": "Dear Speakers, \n\nPlease review the attached agenda for the upcoming conference on 11/5/2024.\n\nBest, \nEvent Planner"
+},
+{
+    "from": "hr@company.com",
+    "to": "candidates@company.com",
+    "subject": "Interview Schedule - 10/22/2024",
+    "body": "Dear Candidates, \n\nYour interview is scheduled for 10/22/2024 at 10:00 AM. Good luck!\n\nBest, \nHR Team"
+}
+]
