@@ -65,6 +65,10 @@ const SearchBar = ({ setSearchResults, setLanguageModelResponse }) => {
 };
 
 const ResultEmail = ({ searchResult }) => {
+  const truncateBody = (body) => {
+    if (!body || body.length <= 150) return body;
+    return `${body.substring(0, 150)}...`;
+  };
   return (
       <ListItem className="ListItem">
           <ListItemText
@@ -78,7 +82,7 @@ const ResultEmail = ({ searchResult }) => {
                           >
                               {searchResult.to}
                           </Typography>
-                          {` - ${searchResult.body}`}
+                          {` - ${truncateBody(searchResult.body)} `}
                   </React.Fragment>
               }
           />
@@ -90,11 +94,23 @@ function MainPage() {
   const [searchResults, setSearchResults] = useState(null);
   const [languageModelResponse, setLanguageModelResponse] = useState(null);
 
+  const loadImage = () => {
+    const img = document.createElement('img');
+    img.src = '/scopeLogo.jpg'; // Replace with your actual image path
+    img.className = 'topRightImage';
+    document.body.appendChild(img);
+  };
+
+  React.useEffect(() => {
+    loadImage();
+  }, []);
+
   return (
     <div className="MainPage">
       <h1 style={{color: 'white', textAlign: 'center'}}>
         Good Evening, Alex
       </h1>
+      
       <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
       {searchResults?.metadatas && (
           <List className="List">
