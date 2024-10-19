@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import queryEmails from '../api/queryEmails.js';
 import queryLanguageModel from '../api/queryLanguageModel.js';
 
@@ -15,7 +15,7 @@ const SearchBar = ({ setSearchResults, setLanguageModelResponse }) => {
             setTimeout(() => {
                 setPosition('bottom');
                 setIsVisible(true);
-            }, 500); // This should match the transition duration in CSS
+            }, 500);
         }
         const result = await queryEmails(searchQuery);
         setSearchResults(result);
@@ -36,6 +36,20 @@ const SearchBar = ({ setSearchResults, setLanguageModelResponse }) => {
         e.preventDefault();
         handleClick(e);
     };
+
+    React.useEffect(() => {
+        const fadeInAnimation = () => {
+            setIsVisible(true);
+        };
+
+        // Trigger fade-in animation after a short delay
+        setTimeout(fadeInAnimation, 500); // This should match the transition duration in CSS
+
+        return () => {
+            // Cleanup: Reset visibility when component unmounts
+            setIsVisible(false);
+        };
+    }, [position]);
 
     return (
         <form className={`SearchBar ${position} ${isVisible ? 'visible' : 'hidden'}`} onSubmit={handleSubmit}>
