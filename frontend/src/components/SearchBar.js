@@ -10,6 +10,7 @@ const SearchBar = ({ setSearchResults, setLanguageModelResponse }) => {
 
     const handleClick = async (event) => {
         event.preventDefault();
+        setLanguageModelResponse(null);
         if (position === 'top') {
             setIsVisible(false);
             setTimeout(() => {

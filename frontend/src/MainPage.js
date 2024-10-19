@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography/index.js';
 import EmailModal from './EmailModal.js';
 import SearchBar from './components/SearchBar.js';
 import ResultEmail from './components/ResultEmail.js';
-
+import TypewriterTypography from './components/TypewriterTypography.js';
 
 function MainPage() {
   const [searchResults, setSearchResults] = useState(null);
@@ -72,17 +72,20 @@ function MainPage() {
           marginBottom: '25px',
           opacity: '0.6'
         }}>
-          <Typography style={{
-            paddingTop: '5px',
-            paddingBottom: '5px',
-            color: 'black',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: '20px',
-            fontFamily: 'Arial, sans-serif'
-          }}>
-            {languageModelResponse}
-          </Typography>
+          <TypewriterTypography
+            text={languageModelResponse}
+            delay={30}
+            style={{
+              paddingTop: '5px',
+              paddingBottom: '5px',
+              color: 'black',
+              textAlign: 'left',
+              marginLeft: '15px',
+              fontWeight: 'bold',
+              fontSize: '20px',
+              fontFamily: 'Arial, sans-serif'
+              }}
+          />
         </Box>
       )}
       <EmailModal isOpen={!!selectedEmail} onClose={() => setSelectedEmail(null)} content={selectedEmail} />
