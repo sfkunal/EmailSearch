@@ -1,4 +1,5 @@
 from flask import Flask, request
+from flask_cors import CORS, cross_origin
 import chromadb
 from chromadb.utils import embedding_functions
 from groq import Groq
@@ -15,6 +16,7 @@ GROQ_API_KEY = CONFIG["SECRETS"]["GROQ_API_KEY"]
 # flask --app backend/main --debug run
 
 app = Flask(__name__)
+CORS(app, origins="*")
 
 client = chromadb.Client()
 collection = client.create_collection(
