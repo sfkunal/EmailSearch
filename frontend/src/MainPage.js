@@ -65,29 +65,34 @@ function MainPage() {
         ) : null
       )}
       {languageModelResponse && (
-        <Box style={{
-          backgroundColor: '#E0E0E0',
-          borderRadius: '12px',
-          marginTop: '25px',
-          marginBottom: '25px',
-          opacity: '0.6'
-        }}>
-          <TypewriterTypography
-            text={languageModelResponse}
-            delay={30}
-            style={{
-              paddingTop: '5px',
-              paddingBottom: '5px',
-              color: 'black',
-              textAlign: 'left',
-              marginLeft: '15px',
-              fontWeight: 'bold',
-              fontSize: '20px',
-              fontFamily: 'Arial, sans-serif'
-              }}
-          />
-        </Box>
-      )}
+  <div style={{ maxWidth: '100%', overflow: 'hidden', textAlign: 'left' }}>
+    <Box style={{
+      backgroundColor: '#E0E0E0',
+      borderRadius: '12px',
+      marginTop: '25px',
+      marginBottom: '25px',
+      opacity: '0.6',
+      width: 'auto', // Set width to auto
+      display: 'inline-block', // Make it inline-block
+    }}>
+      <TypewriterTypography
+        text={languageModelResponse}
+        delay={30}
+        style={{
+          paddingTop: '5px',
+          paddingBottom: '5px',
+          color: 'black',
+          textAlign: 'left',
+          marginLeft: '15px',
+          marginRight: '15px',
+          fontWeight: 'bold',
+          fontSize: '20px',
+          fontFamily: 'Arial, sans-serif'
+        }}
+      />
+    </Box>
+  </div>
+)}
       <EmailModal isOpen={!!selectedEmail} onClose={() => setSelectedEmail(null)} content={selectedEmail} />
     </div>
   );
