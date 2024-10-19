@@ -96,7 +96,7 @@ def ai_message():
 
     response = chat_completion.choices[0].message.content
 
-    return response
+    return {"response": response}
 
 
 synth_initialize()
