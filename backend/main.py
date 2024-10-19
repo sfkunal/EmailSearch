@@ -77,13 +77,13 @@ def ai_message():
     for ind, metadata in enumerate(results["metadatas"]):
         textual_data += f"[#{ind}] An email sent from {metadata['from']} to {metadata['to']} with subject line {metadata['subject']} with content of <<<{metadata['body']}>>>\n"
 
-    print(textual_data)
+    # print(textual_data)
 
     chat_completion = client.chat.completions.create(
         messages=[
             {
                 "role": "system",
-                "content": f"Helpful assistant that assists users to find their content from emails for the given data, where individual emails are separated by [#]. {textual_data}"
+                "content": f"Helpful assistant that assists users to find their content from emails for the given data, where individual emails are separated by [#]. Your job is to response as concisely as possible with the given context. Please limit your response to 1-2 sentences max. If there is not enough context to answer the question, please let the user know. The user may give you a vague prompt, or ask a direct question. If given a vague prompt, please supply a concise response regarding relevant information to the prompt. Again, only 1-2 sentences max. \n\n {textual_data}"
             },
             {
                 "role": "user",
@@ -95,7 +95,7 @@ def ai_message():
 
     response = chat_completion.choices[0].message.content
 
-    return response
+    return {"response": response}
 
 
 synth_initialize()
