@@ -1,8 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import IconButton from "@mui/material/IconButton/index.js";
 import TextField from "@mui/material/TextField/index.js";
-import Box from "@mui/material/Box/index.js"
 import Button from "@mui/material/Button/index.js";
 import queryEmails from "./api/queryEmails.js";
 
@@ -23,13 +21,12 @@ const SearchBar = ({ searchResults, setSearchResults }) => {
 
   return (
     <div className="SearchBar">
-      <TextField
+      <input
+        type="text"
         id="search-bar"
         value={searchQuery}
         onChange={handleChange}
-        label="How can I help you?"
-        variant="outlined"
-        placeholder="Search Mail"
+        placeholder="How can I help you?"
       />
       <Button variant="contained" color="primary" onClick={handleClick}>
         Submit
@@ -43,7 +40,9 @@ function MainPage() {
 
   return (
     <div className="MainPage">
-      <h1>Welcome to Your Electron React App</h1>
+      <h1 style={{color: 'white', textAlign: 'center'}}>
+        Good Evening, Alex!
+      </h1>
       <SearchBar searchResults={searchResults} setSearchResults={setSearchResults} />
       {/* Add more components and content here */}
     </div>

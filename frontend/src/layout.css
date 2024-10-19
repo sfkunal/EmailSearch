@@ -22,26 +22,32 @@ html, body {
   .MainPage {
     position: relative;
     z-index: 1;
-    width: 100%;
-    max-width: 800px;
+    width: 80%;
     margin: 0 auto;
     padding: 20px;
+    text-align: center;
   }
   
-  .SearchBar {
-    background-color: rgba(255, 255, 255, 0.8);
+.SearchBar {
+    background-color: rgba(224, 224, 224, 0.6);
     backdrop-filter: blur(10px);
     border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 10px;
     margin-bottom: 20px;
+    text-align: left;
+    display: flex;
+    align-items: center;
   }
   
   .SearchBar input[type="text"] {
-    border: none;
-    border-radius: 10px;
-    padding: 10px;
     width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    font-family: inherit;
+    font-size: inherit;
+    margin-right: 10px;
   }
   
   .SearchBar button {
@@ -49,7 +55,7 @@ html, body {
     color: white;
     border: none;
     padding: 10px 20px;
-    border-radius: 10px;
+    border-radius: 0px;
     cursor: pointer;
   }
   
