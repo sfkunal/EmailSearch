@@ -17,9 +17,11 @@ const SearchBar = ({ searchResults, setSearchResults }) => {
   const handleClick = async (event) => {
     event.preventDefault();
     const result = await queryEmails(searchQuery);
-    const data = result?.metadatas;
-    console.log("received data: ", data);
-    setSearchResults(data);
+    setSearchResults(result);
+
+    // const data = result?.metadatas;
+    console.log("received data: ", result);
+    // setSearchResults(data);
   };
 
   const handleChange = (e) => {
@@ -70,11 +72,13 @@ function MainPage() {
 
   return (
     <div className="MainPage">
-      <h1>Welcome to Your Electron React App</h1>
+      <h1 style={{color: 'white', textAlign: 'center'}}>
+        Good Evening, Alex
+      </h1>
       <SearchBar searchResults={searchResults} setSearchResults={setSearchResults} />
-      {searchResults && (
+      {searchResults?.metadatas && (
           <List className="List">
-              {searchResults[0].map((result, index) => (
+              {searchResults.metadatas[0].map((result, index) => (
                   <React.Fragment key={index}>
                       <ResultEmail searchResult={result} />
                       <Divider />
