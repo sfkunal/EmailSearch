@@ -15,9 +15,18 @@ import EmailModal from './EmailModal.js';
 
 const SearchBar = ({ setSearchResults, setLanguageModelResponse }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [position, setPosition] = useState('top');
+  const [isVisible, setIsVisible] = useState(true);
 
   const handleClick = async (event) => {
     event.preventDefault();
+    if (position === 'top') {
+      setIsVisible(false);
+      setTimeout(() => {
+        setPosition('bottom');
+        setIsVisible(true);
+      }, 500); // This should match the transition duration in CSS
+    }
     const result = await queryEmails(searchQuery);
     setSearchResults(result);
     console.log("received data: ", result);
@@ -39,7 +48,7 @@ const SearchBar = ({ setSearchResults, setLanguageModelResponse }) => {
   };
 
   return (
-    <form className="SearchBar" onSubmit={handleSubmit}>
+    <form className={`SearchBar ${position} ${isVisible ? 'visible' : 'hidden'}`} onSubmit={handleSubmit}>
       <input
         type="text"
         value={searchQuery}
@@ -122,9 +131,8 @@ function MainPage() {
         Good Evening, Alex
       </h1>
 
-      {!searchResults && (
-        <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
-      )}
+      <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
+
       {searchResults?.metadatas && (
         searchResults.distances[0]?.some(distance => distance <= 0.5) ? (
           <List className="List">
@@ -162,9 +170,6 @@ function MainPage() {
             {languageModelResponse}
           </Typography>
         </Box>
-      )}
-      {searchResults && (
-        <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
       )}
       <EmailModal isOpen={!!selectedEmail} onClose={() => setSelectedEmail(null)} content={selectedEmail} />
     </div>

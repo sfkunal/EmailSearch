@@ -1,157 +1,180 @@
 /* layout.css */
 
 html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-  }
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
 
-  .App {
-    background-image: url('images/background.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 105%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: -10px;
-  }
-
-  .MainPage {
-    position: relative;
-    z-index: 1;
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-  }
-
-.SearchBar {
-    background-color: rgba(224, 224, 224, 0.6);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    margin-bottom: 20px;
-    text-align: left;
-    display: flex;
-    align-items: center;
-  }
-
-  .SearchBar input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 20px;
-    font-family: inherit;
-    font-size: inherit;
-    margin-right: 10px;
-    background-color: transparent;
-    outline: none;
-    box-shadow: 0 0 0 0;
-  }
-
-  .SearchBar button {
-    background-color: #1976d2;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 12px;
-    cursor: pointer;
-  }
-
-  .SearchBar button:hover {
-    background-color: #1565c0;
-  }
-
-  .List {
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    margin-top: 20px;
-  }
-
-  .ListItem {
-    background-color: transparent;
-    border: none;
-    padding: 10px;
-  }
-
-  .ListItemText {
-    color: #333;
-  }
-
-  .ListItemIcon {
-    min-width: 0;
-    opacity: 0.6;
-  }
-
-  .ListItemSecondaryAction {
-    opacity: 0.6;
-  }
-  
-  .topRightImage {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    z-index: 2;
-  }
-
-.modal-overlay {
+.App {
+  background-image: url('images/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 105%;
+  height: 100%;
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+  left: -10px;
 }
 
-.modal-content {
-  background-color: lightgray;
-  padding: 20px;
-  border-radius: 20px;
-  max-width: 800px;
-  width: 100%;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.MainPage {
   position: relative;
-  text-align: left;
+  z-index: 1;
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
 }
 
-.modal-content button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: transparent;
+.SearchBar {
+  background-color: rgba(224, 224, 224, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  margin-bottom: 20px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  z-index: 1000;
+  transition: all 0.5s ease-in-out;
+  opacity: 0;
+}
+
+.SearchBar.visible {
+  opacity: 1;
+}
+
+.SearchBar.hidden {
+  opacity: 0;
+}
+
+.SearchBar.top {
+  top: 120px;
+}
+
+.SearchBar.bottom {
+  bottom: 20px;
+}
+
+.SearchBar input[type="text"] {
+  width: 100%;
+  padding: 10px;
   border: none;
-  font-size: 16px;
+  border-radius: 20px;
+  font-family: inherit;
+  font-size: inherit;
+  margin-right: 10px;
+  background-color: transparent;
+  outline: none;
+  box-shadow: 0 0 0 0;
+}
+
+.SearchBar button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
   cursor: pointer;
 }
 
+.SearchBar button:hover {
+  background-color: #1565c0;
+}
+
+.List {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  margin-top: 20px;
+}
+
+.ListItem {
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+}
+
+.ListItemText {
+  color: #333;
+}
+
+.ListItemIcon {
+  min-width: 0;
+  opacity: 0.6;
+}
+
+.ListItemSecondaryAction {
+  opacity: 0.6;
+}
+
+.topRightImage {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  z-index: 2;
+}
+
+.modal-overlay {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: rgba(0, 0, 0, 0.5);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+}
+
+.modal-content {
+background-color: lightgray;
+padding: 20px;
+border-radius: 20px;
+max-width: 800px;
+width: 100%;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+position: relative;
+text-align: left;
+}
+
+.modal-content button {
+position: absolute;
+top: 10px;
+right: 10px;
+background-color: transparent;
+border: none;
+font-size: 16px;
+cursor: pointer;
+}
+
 .modal-content h2 {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-bottom: 10px;
-  margin-left: 0; /* Remove default left margin */
+font-size: 1.2em;
+font-weight: bold;
+margin-bottom: 10px;
+margin-left: 0; /* Remove default left margin */
 }
 
 .modal-content p {
-  font-weight: bold;
-  margin-bottom: 5px;
-  margin-left: 0; /* Remove default left margin */
+font-weight: bold;
+margin-bottom: 5px;
+margin-left: 0; /* Remove default left margin */
 }
 .modal-content pre {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  max-width: 100%;
-  overflow-x: auto;
-  
+white-space: pre-wrap;
+word-wrap: break-word;
+max-width: 100%;
+overflow-x: auto;
+
 }
