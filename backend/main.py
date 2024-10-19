@@ -64,8 +64,10 @@ def return_result():
 
 @app.post('/message')
 def ai_message():
-    ids = request.args.get("ids")
-    prompt = request.args.get("prompt")
+    body_json = request.get_json()
+
+    ids = body_json.get("ids")
+    prompt = body_json.get("prompt")
 
     results = collection.get(
         ids=ids.split(","),
