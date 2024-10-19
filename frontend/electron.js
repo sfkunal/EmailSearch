@@ -4,8 +4,7 @@ import isDev from 'electron-is-dev';
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    fullscreen: true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -17,10 +16,6 @@ function createWindow() {
       ? 'http://localhost:3000'
       : `file://${join(__dirname, '../build/index.html')}`
   );
-
-  if (isDev) {
-    win.webContents.openDevTools();
-  }
 }
 
 app.whenReady().then(createWindow);
