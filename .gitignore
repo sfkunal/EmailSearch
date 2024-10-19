@@ -6,3 +6,4 @@ credentials.json
 /calhacks
 token.json
 backend/data/images
+frontend/src/config.js
