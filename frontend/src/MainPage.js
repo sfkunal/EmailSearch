@@ -41,14 +41,14 @@ const SearchBar = ({ setSearchResults, setLanguageModelResponse }) => {
     <form className="SearchBar" onSubmit={handleSubmit}>
       <input
         type="text"
-          value={searchQuery}
-          onChange={handleChange}
-          placeholder="Search Mail"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleSubmit(e);
-            }
-          }}
+        value={searchQuery}
+        onChange={handleChange}
+        placeholder="Search Mail"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleSubmit(e);
+          }
+        }}
       />
       <button type="submit" style={{
         backgroundColor: "#64758d",
@@ -70,23 +70,23 @@ const ResultEmail = ({ searchResult }) => {
     return `${body.substring(0, 150)}...`;
   };
   return (
-      <ListItem className="ListItem">
-          <ListItemText
-              primary={searchResult.subject}
-              secondary={
-                  <React.Fragment>
-                      <Typography
-                          component="span"
-                          variant="body2"
-                          sx={{ color: 'text.primary', display: 'inline' }}
-                          >
-                              {searchResult.to}
-                          </Typography>
-                          {` - ${truncateBody(searchResult.body)} `}
-                  </React.Fragment>
-              }
-          />
-      </ListItem>
+    <ListItem className="ListItem">
+      <ListItemText
+        primary={searchResult.subject}
+        secondary={
+          <React.Fragment>
+            <Typography
+              component="span"
+              variant="body2"
+              sx={{ color: 'text.primary', display: 'inline' }}
+            >
+              {searchResult.to}
+            </Typography>
+            {` - ${truncateBody(searchResult.body)} `}
+          </React.Fragment>
+        }
+      />
+    </ListItem>
   );
 }
 
@@ -96,7 +96,7 @@ function MainPage() {
 
   const loadImage = () => {
     const img = document.createElement('img');
-    img.src = '/scopeLogo.jpg'; 
+    img.src = '/scopeLogo.jpg';
     img.className = 'topRightImage';
     document.body.appendChild(img);
   };
@@ -107,22 +107,27 @@ function MainPage() {
 
   return (
     <div className="MainPage">
-      <h1 style={{color: 'white', textAlign: 'center'}}>
+      <h1 style={{ color: 'white', textAlign: 'center' }}>
         Good Evening, Alex
       </h1>
-      
-      <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
-      {searchResults?.metadatas && (
-          <List className="List">
-              {searchResults.metadatas[0].map((result, index) => (
-                  <React.Fragment key={index}>
-                      <ResultEmail searchResult={result} />
-                      <Divider />
-                  </React.Fragment>
-              ))}
-          </List>
+
+      {!searchResults && (
+        <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
       )}
-      {languageModelResponse && (<p style={{color: 'white', textAlign: 'center'}}>{languageModelResponse}</p>)}
+      {searchResults?.metadatas && (
+        <List className="List">
+          {searchResults.metadatas[0].map((result, index) => (
+            <React.Fragment key={index}>
+              <ResultEmail searchResult={result} />
+              <Divider />
+            </React.Fragment>
+          ))}
+        </List>
+      )}
+      {languageModelResponse && (<p style={{ color: 'white', textAlign: 'center' }}>{languageModelResponse}</p>)}
+      {searchResults && (
+        <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
+      )}
     </div>
   );
 }
