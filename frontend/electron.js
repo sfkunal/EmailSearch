@@ -17,10 +17,6 @@ function createWindow() {
       ? 'http://localhost:3000'
       : `file://${join(__dirname, '../build/index.html')}`
   );
-
-  if (isDev) {
-    win.webContents.openDevTools();
-  }
 }
 
 app.whenReady().then(createWindow);
