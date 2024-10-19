@@ -78,7 +78,7 @@ def ai_message():
     for ind, metadata in enumerate(results["metadatas"]):
         textual_data += f"[#{ind}] An email sent from {metadata['from']} to {metadata['to']} with subject line {metadata['subject']} with content of <<<{metadata['body']}>>>\n"
 
-    print(textual_data)
+    # print(textual_data)
 
     chat_completion = client.chat.completions.create(
         messages=[
