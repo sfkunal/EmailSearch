@@ -1,10 +1,12 @@
 from flask import Flask, request
+from flask_cors import CORS, cross_origin
 import chromadb
 import json
 
 # flask --app backend/main --debug run
 
 app = Flask(__name__)
+CORS(app, origins="*")
 
 client = chromadb.Client()
 collection = client.create_collection(
