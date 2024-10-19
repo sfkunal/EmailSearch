@@ -4,3 +4,5 @@ chroma_data
 TOKENS.ini
 credentials.json
 /calhacks
+token.json
+backend/data/images

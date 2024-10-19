@@ -1,4 +1,5 @@
 import os.path
+from pathlib import Path
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -18,13 +19,18 @@ SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
 @dataclass
 class AttachmentData:
     body: str
+    content_type: str
 
 
 @dataclass
 class EmailData:
+    date: str
+    from_: str
     to: str
     subject: str
     body: str
+    content_type: str
+    message_id: str
     attachments: list[AttachmentData]
 
 
@@ -38,12 +44,31 @@ def header_value(header: dict, header_name: str):
         return header[ind]["value"]
     
 
+def process_html(html: str) -> tuple[str, list[str]]:  # (processed content, image links)
+    if html is None:
+        return None
+    
+    html = re.sub(r"[\r\n\t]", " ", html)
+    image_urls = re.findall(r'<img.*src="(?P<url>https?://[^\s]+)".*/?>', html)
+    html = re.sub(r"<style.*>.*</style>", " ", html)
+    html = re.sub(r"<.*?>", r" ", html)
+    html = html.replace("      ", " ")
+    
+    return html, image_urls
+    
+
 def decode_body(body: dict):
     if body.get("data", None) is not None:
-        # print(body["size"], body["data"])
         value = base64.urlsafe_b64decode(body["data"]).decode("utf-8")
         value = re.sub(r"[\r\n]", " ", value)
         return value
+    
+
+def decode_and_save_attachments(body: dict, file_path: Path):
+    if body.get("data", None) is not None:
+        img = base64.urlsafe_b64decode(body["data"])
+        with open(file_path, "wb") as fobj:
+            fobj.write(img)
 
 
 class GmailAPI:
@@ -83,79 +108,54 @@ class GmailAPI:
             payload = gmail.service.users().messages().get(userId="me", id=message["id"], format="full").execute()["payload"]
             headers = payload["headers"]
             body = payload["body"]
+            # print(headers)
             data.append(
                 EmailData(
+                    date=header_value(headers, "Date"),
+                    from_=header_value(headers, "From"),
                     to=header_value(headers, "Delivered-To"),
                     subject=header_value(headers, "Subject"),
                     body=decode_body(body),
+                    content_type=header_value(headers, "Content-Type"),
+                    message_id=header_value(headers, "Message-ID"),
                     attachments=[],
                 )
             )
+            # print(">>>>>>", headers)
 
             parts = payload.get("parts", None)
             if parts is not None:
                 for part in parts:
                     headers = part["headers"]
+                    # print("!!!!!!!!", part["body"]) #header_value(headers, "Content-Type"))
+                    if part["filename"]:
+                        attachment_id = part["body"]["attachmentId"]
+                        attachment_ref = self.service.users().messages().attachments().get(userId="me", messageId=data[-1].message_id, id=attachment_id).execute()
+                        decode_and_save_attachments(attachment_ref, Path("./backend/data/images/") / part["filename"])
+
                     body = part["body"]
                     data[-1].attachments.append(
                         AttachmentData(
-                            body=decode_body(body)
+                            body=decode_body(body),
+                            content_type=header_value(headers, "Content-Type"),
                         )
                     )
+
+        for email in data:
+            if "text/html" in email.content_type:
+                email.body, image_urls = process_html(email.body)
+                print("========", image_urls)
+            for attachment in email.attachments:
+                if "text/html" in attachment.content_type:
+                    attachment.body, image_urls = process_html(attachment.body)
+                    print("<<<<<<<", image_urls)
         return data
 
 
 if __name__ == "__main__":
     gmail = GmailAPI()
 
-    for mail in gmail.get_emails(count=10):
+    for mail in gmail.get_emails(count=3):
         print(mail)
         print()
 
-    # current_user = gmail.service.users().messages().list(userId="me").execute()
-    # messages = current_user.get("messages", [])
-
-    # headers_bodies = []
-    # for message in messages[2:3]:
-    #     resp = gmail.service.users().messages().get(userId="me", id=message["id"], format="full").execute()
-    #     # print(resp)
-    #     headers = resp["payload"]["headers"]
-    #     body = resp["payload"]["body"]
-
-    #     print(header_value(headers, "Delivered-To"), header_value(headers, "Subject"))
-    #     print(decode_body(body))
-    #     print()
-
-    #     parts = resp["payload"].get("parts", None)
-    #     if parts is not None:
-    #         for part in parts:
-    #             headers = part["headers"]
-    #             body = part["body"]
-    #             print(header_value(headers, "Content-Type"))
-    #             print(decode_body(body))
-    #             print()
-
-        # headers_bodies.append((headers, body))
-
-        # parts = resp
-        # while (parts := parts["payload"].get("parts", None)) is not None:
-        #     headers = parts["payload"]["headers"]
-        #     body = parts["payload"]["body"]
-        #     headers_bodies.append(parts)
-
-        # print(headers)
-        # print(body)
-        # print(more_parts)
-        # headers_bodies.append((headers, body))
-        # if more_parts is not None:
-        #     headers_bodies.append(more_parts)
-
-    # for header_body in headers_bodies:
-    #     print(header_body)
-
-    # if not labels:
-    #     print("No labels found.")
-    # else:
-    #     print("Labels:")
-    #     for label in labels:
-    #         print(label["name"])
