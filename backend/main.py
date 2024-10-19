@@ -22,7 +22,7 @@ app = Flask(__name__)
 CORS(app, origins="*")
 
 
-client = Groq(
+groq_client = Groq(
     api_key=GROQ_API_KEY,
 )
 
@@ -43,16 +43,16 @@ embedder = SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
 multimodla_embedder = OpenCLIPEmbeddingFunction()
 data_loader = ImageLoader()
 
-client = chromadb.Client()
-collection = client.create_collection(
+chromadb_client = chromadb.Client()
+collection = chromadb_client.create_collection(
     "emails",
     metadata={"hnsw:space": "cosine"},
     embedding_function=embedder,
 )
-multimodal_collection = client.create_collection(
+multimodal_collection = chromadb_client.create_collection(
     "emails_and_attachments",
     metadata={"hnsw:space": "cosine"},
-    embedding_function=embedder,
+    embedding_function=multimodla_embedder,
     data_loader=data_loader
 )
 
@@ -124,7 +124,7 @@ def ai_message():
 
     # print(textual_data)
 
-    chat_completion = client.chat.completions.create(
+    chat_completion = groq_client.chat.completions.create(
         messages=[
             {
                 "role": "system",
