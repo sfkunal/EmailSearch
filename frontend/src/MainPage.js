@@ -65,13 +65,17 @@ const SearchBar = ({ setSearchResults, setLanguageModelResponse }) => {
   );
 };
 
-const ResultEmail = ({ searchResult, handleOpenModal }) => {
+const ResultEmail = ({ searchResult, onClick }) => {
   const truncateBody = (body) => {
     if (!body || body.length <= 150) return body;
     return `${body.substring(0, 150)}...`;
   };
+  
   return (
-    <ListItem button="true" onClick={handleOpenModal(searchResult)} className="ListItem">
+    <ListItem 
+      className="ListItem" 
+      onClick={onClick}
+    >
       <ListItemText
         primary={searchResult.subject}
         secondary={
@@ -94,21 +98,11 @@ const ResultEmail = ({ searchResult, handleOpenModal }) => {
 function MainPage() {
   const [searchResults, setSearchResults] = useState(null);
   const [languageModelResponse, setLanguageModelResponse] = useState(null);
-  const [showModal, setShowModal] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState(null);
 
-  React.useEffect(() => {
-    console.log(selectedEmail);
-  }, [selectedEmail]);
-
-  const handleOpenModal = (email) => {
+  const handleEmailClick = (email) => {
+    console.log('Clicked email:', email);
     setSelectedEmail(email);
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setSelectedEmail(null);
   };
 
   const loadImage = () => {
@@ -132,12 +126,15 @@ function MainPage() {
         <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
       )}
       {searchResults?.metadatas && (
-        searchResults.distances[0]?.some(distance => distance <= 0.7) ? (
+        searchResults.distances[0]?.some(distance => distance <= 0.5) ? (
           <List className="List">
-            {searchResults.distances[0]?.filter((distance, index) => distance <= 0.7).map((distance, index) => {
+            {searchResults.distances[0]?.filter((distance, index) => distance <= 0.5).map((distance, index) => {
               return (
                 <React.Fragment key={index}>
-                  <ResultEmail searchResult={searchResults.metadatas[0][index]} handleOpenModal={handleOpenModal} />
+                  <ResultEmail 
+                    searchResult={searchResults.metadatas[0][index]}
+                    onClick={() => handleEmailClick(searchResults.metadatas[0][index])}
+                  />
                   <Divider />
                 </React.Fragment>
               );
@@ -145,11 +142,6 @@ function MainPage() {
           </List>
         ) : null
       )}
-      <EmailModal 
-        isOpen={showModal} 
-        onClose={handleCloseModal} 
-        content={selectedEmail}
-      />
       {languageModelResponse && (
         <Box style={{
           backgroundColor: '#E0E0E0',
@@ -174,6 +166,7 @@ function MainPage() {
       {searchResults && (
         <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
       )}
+      <EmailModal isOpen={!!selectedEmail} onClose={() => setSelectedEmail(null)} content={selectedEmail} />
     </div>
   );
 }
