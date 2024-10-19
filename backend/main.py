@@ -18,13 +18,16 @@ GROQ_API_KEY = CONFIG["SECRETS"]["GROQ_API_KEY"]
 app = Flask(__name__)
 CORS(app, origins="*")
 
+
+embedder = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
+
 client = chromadb.Client()
 collection = client.create_collection(
     "emails",
-    metadata={"hnsw:space": "cosine"}
+    metadata={"hnsw:space": "cosine"},
+    embedding_function=embedder,
 )
 
-# embedder = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
 
 client = Groq(
     api_key=GROQ_API_KEY,
@@ -36,8 +39,6 @@ def synth_initialize():
         data = json.load(fobj)
         for id, d in enumerate(data):
             merged_data = d["subject"]+" "+re.sub(r"[\n]", " ", d["body"])
-            # embeddings = embedder(merged_data)
-            # print(embeddings)
             collection.add(
                 documents=[merged_data], # we embed for you, or bring your own
                 metadatas=[{
@@ -53,7 +54,7 @@ def synth_initialize():
 @app.get('/result')
 def return_result():
     query = request.args.get("query")
-    
+
     results = collection.query(
         query_texts=[query],
         n_results=5,

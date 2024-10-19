@@ -106,5 +106,245 @@
     "to": "candidates@company.com",
     "subject": "Interview Schedule - 10/22/2024",
     "body": "Dear Candidates, \n\nYour interview is scheduled for 10/22/2024 at 10:00 AM. Good luck!\n\nBest, \nHR Team"
+},
+{
+    "from": "maria.lopez@company.com",
+    "to": "john.doe@company.com, sarah.lee@company.com",
+    "subject": "Reminder: Team Sync Meeting - 10/23/2024",
+    "body": "Hi team, \n\nJust a reminder that our next team sync is scheduled for Wednesday, October 23rd at 10:00 AM. We’ll be reviewing progress on Q4 deliverables. \n\nPlease add your updates to the shared document by Monday: [link]. \n\nSee you all soon! \n\nBest, \nMaria"
+},
+{
+    "from": "jason.kim@university.edu",
+    "to": "group-research@university.edu",
+    "subject": "Lab Meeting Rescheduled to 10/21",
+    "body": "Hello all, \n\nThe lab meeting originally scheduled for Tuesday has been rescheduled to Friday, 10/21, at 3:00 PM due to room availability. Apologies for any inconvenience. \n\nBest, \nJason"
+},
+{
+    "from": "karen@startup.com",
+    "to": "devteam@startup.com",
+    "subject": "New Sprint Planning Meeting - 10/19 at 2 PM",
+    "body": "Hi everyone, \n\nOur next sprint planning meeting will take place on Thursday, 10/19, at 2 PM. Please review the backlog before the meeting and suggest any priorities you'd like to discuss. \n\nThanks, \nKaren"
+},
+{
+    "from": "linda.park@school.org",
+    "to": "history101@school.org",
+    "subject": "History 101: Office Hours Change",
+    "body": "Hi all, \n\nDue to a conference, I will not be available during my regular office hours next week. I have shifted them to Wednesday, 10/18, from 1 PM to 3 PM. Let me know if this time doesn't work for you! \n\nBest, \nLinda Park"
+},
+{
+    "from": "hr@corporation.com",
+    "to": "all@corporation.com",
+    "subject": "All Hands Meeting - 11/1/2024",
+    "body": "Dear Team, \n\nOur quarterly all-hands meeting is scheduled for Friday, November 1st at 9:00 AM in the main conference room. Breakfast will be provided! \n\nLooking forward to your participation. \n\nBest regards, \nHR Team"
+},
+{
+    "from": "events@community.org",
+    "to": "volunteers@community.org",
+    "subject": "Volunteer Orientation Meeting - 10/25/2024",
+    "body": "Dear Volunteers, \n\nThank you for signing up! Our volunteer orientation is scheduled for 10/25 at 5 PM. The meeting will take place at the Community Center, Room 203. \n\nLooking forward to meeting you all. \n\nBest, \nCommunity Events Team"
+},
+{
+    "from": "professor.lee@college.edu",
+    "to": "students@college.edu",
+    "subject": "Class Canceled on 10/20",
+    "body": "Dear Students, \n\nUnfortunately, I need to cancel class on 10/20 due to a personal emergency. Please refer to the course site for any updates. \n\nApologies for the inconvenience. \n\nRegards, \nProfessor Lee"
+},
+{
+    "from": "alex@freelance.com",
+    "to": "client@designproject.com",
+    "subject": "Meeting to Discuss Draft Review",
+    "body": "Hi [Client Name], \n\nI’d like to schedule a meeting to review the first draft of the design project. Are you available on 10/22 at 1 PM? Let me know if another time works better. \n\nBest, \nAlex"
+},
+{
+    "from": "projectlead@techcorp.com",
+    "to": "project-team@techcorp.com",
+    "subject": "Project Kickoff - 10/30/2024",
+    "body": "Hello Team, \n\nOur project kickoff meeting is confirmed for 10/30 at 11 AM. We'll go over the scope, timelines, and key deliverables. The meeting will be hybrid, with an option to join via Zoom: [link]. \n\nLooking forward to starting strong! \n\nBest, \nProject Lead"
+},
+{
+    "from": "admissions@university.edu",
+    "to": "applicant@university.edu",
+    "subject": "Interview Schedule Confirmation",
+    "body": "Dear [Applicant Name], \n\nWe have scheduled your interview for Thursday, 10/19, at 10:00 AM. Please arrive 10 minutes early at the Admissions Office, Room 101. \n\nIf you need to reschedule, let us know as soon as possible. \n\nBest regards, \nAdmissions Team"
+},
+{
+    "from": "teamlead@agency.com",
+    "to": "design@agency.com, marketing@agency.com",
+    "subject": "Creative Brainstorming Session - 11/02/2024",
+    "body": "Hello Team, \n\nWe’re holding a brainstorming session on November 2nd at 3 PM to discuss campaign ideas for the Q1 launch. Bring your creative ideas! Snacks provided. \n\nBest, \nTeam Lead"
+},
+{
+    "from": "manager@retailcorp.com",
+    "to": "storemanagers@retailcorp.com",
+    "subject": "Monthly Store Manager Meeting - 10/24/2024",
+    "body": "Dear Managers, \n\nOur monthly store manager meeting will take place on October 24th at 9:30 AM via Zoom. Please be prepared to discuss last month’s performance metrics. \n\nBest regards, \nRegional Manager"
+},
+{
+    "from": "jane.doe@realestate.com",
+    "to": "clients@realestate.com",
+    "subject": "Open House Invitation - 10/28/2024",
+    "body": "Hi all, \n\nI’m excited to invite you to an open house at 123 Elm Street on October 28th from 11 AM to 2 PM. Please let me know if you plan to attend. \n\nBest, \nJane"
+},
+{
+    "from": "prof.miller@college.edu",
+    "to": "students2024@college.edu",
+    "subject": "Study Group for Midterms",
+    "body": "Dear Students, \n\nA student-led study group will meet in the library on 10/20 from 4 PM to 6 PM to prepare for the midterms. Join if you're available. \n\nBest, \nProfessor Miller"
+},
+{
+    "from": "frank.carter@startup.com",
+    "to": "product-team@startup.com",
+    "subject": "Product Roadmap Review - 10/23",
+    "body": "Hi all, \n\nLet’s meet on 10/23 at 1 PM to review the product roadmap. Please bring feedback from your departments. \n\nBest, \nFrank"
+},
+{
+    "from": "events@company.org",
+    "to": "staff@company.org",
+    "subject": "Holiday Party - Save the Date!",
+    "body": "Hello Team, \n\nMark your calendars! Our annual holiday party will be held on 12/15 at 6 PM. More details to follow soon. \n\nBest, \nEvents Team"
+},
+{
+    "from": "lucy@conference.com",
+    "to": "speakers@conference.com",
+    "subject": "Speaker Orientation - 11/1/2024",
+    "body": "Dear Speakers, \n\nWe’ll hold a brief orientation on 11/1 at 10 AM to go over conference logistics. Please join us if you can. \n\nBest regards, \nLucy"
+},
+{
+    "from": "prof.anderson@university.edu",
+    "to": "gradstudents@university.edu",
+    "subject": "Research Methods Class - Rescheduled Lecture",
+    "body": "Dear Students, \n\nThe lecture on 10/22 is rescheduled to 10/26 at 3 PM due to my travel commitments. Apologies for the short notice! \n\nRegards, \nProfessor Anderson"
+},
+{
+    "from": "caroline@ngo.org",
+    "to": "volunteers@ngo.org",
+    "subject": "Fundraising Strategy Meeting - 10/30/2024",
+    "body": "Hi all, \n\nWe’ll meet on 10/30 at 2 PM to finalize the fundraising strategy for our November campaign. Let me know if you can't attend. \n\nBest, \nCaroline"
+},
+{
+    "from": "faculty@college.edu",
+    "to": "faculty@college.edu",
+    "subject": "Faculty Meeting - 11/5/2024",
+    "body": "Dear Colleagues, \n\nOur next faculty meeting will take place on 11/5 at 9:00 AM in Room 215. Please submit agenda items by 11/1. \n\nBest, \nDepartment Chair"
+},
+{
+    "from": "support@service.com",
+    "to": "customer@service.com",
+    "subject": "Ticket Update: Issue #34567",
+    "body": "Dear Customer, \n\nYour support ticket has been updated. Our technician will visit your site on 10/20 between 9 AM and 11 AM. Let us know if you have any questions. \n\nRegards, \nCustomer Support"
+},
+{
+    "from": "admin@school.edu",
+    "to": "students@school.edu",
+    "subject": "Library Closure Notification",
+    "body": "Dear Students, \n\nPlease note that the library will be closed on 10/27 for maintenance. We apologize for any inconvenience. \n\nBest, \nAdministration"
+},
+{
+    "from": "jack@legalfirm.com",
+    "to": "client@legalfirm.com",
+    "subject": "Meeting to Discuss Case Progress",
+    "body": "Hi [Client Name], \n\nI’d like to schedule a meeting to discuss your case progress. Are you available on 10/23 at 10:00 AM? Let me know if another time works better. \n\nBest regards, \nJack"
+},
+{
+    "from": "danielle@techcompany.com",
+    "to": "dev@techcompany.com",
+    "subject": "Deployment Status Meeting - 10/25/2024",
+    "body": "Hi Team, \n\nLet's meet on 10/25 at 4 PM to review the deployment status of the latest features. Please ensure all tasks are updated by then. \n\nBest, \nDanielle"
+},
+{
+    "from": "sales@onlineplatform.com",
+    "to": "customer@onlineplatform.com",
+    "subject": "Order Confirmation - #456789",
+    "body": "Dear [Customer Name], \n\nThank you for your order! Your purchase has been confirmed and will be shipped by 10/21. You can track your order using this link: [link]. \n\nThank you for shopping with us! \n\nBest regards, \nSales Team"
+},
+{
+    "from": "jenna.martin@corporate.com",
+    "to": "hr@corporate.com",
+    "subject": "Follow-Up: Benefits Enrollment",
+    "body": "Hi HR Team, \n\nI wanted to follow up on my benefits enrollment. Please let me know if any further action is needed from my end. \n\nBest regards, \nJenna Martin"
+},
+{
+    "from": "jake.p@school.edu",
+    "to": "prof.smith@school.edu",
+    "subject": "Question About Assignment Due Date",
+    "body": "Hello Professor Smith, \n\nI wanted to confirm if the assignment due date is still October 20th, or if there has been any change. \n\nThank you, \nJake P."
+},
+{
+    "from": "alice.chen@bank.com",
+    "to": "team-leads@bank.com",
+    "subject": "Monthly Performance Review - 10/26",
+    "body": "Hi All, \n\nOur monthly performance review meeting is scheduled for October 26th at 9:00 AM in Conference Room 3. Please prepare a summary of your team's key metrics. \n\nBest, \nAlice Chen"
+},
+{
+    "from": "marketing@startup.co",
+    "to": "dev@startup.co",
+    "subject": "Website Launch Prep Meeting - 10/22",
+    "body": "Hi Team, \n\nLet’s meet on October 22nd at 2 PM to go over final preparations for the website launch. Please ensure all pending tasks are completed by then. \n\nThanks, \nMarketing Team"
+},
+{
+    "from": "principal@school.org",
+    "to": "parents@school.org",
+    "subject": "Parent-Teacher Conferences - 11/4",
+    "body": "Dear Parents, \n\nParent-teacher conferences will be held on November 4th from 3 PM to 7 PM. Please book your appointment through our online portal. \n\nBest regards, \nSchool Administration"
+},
+{
+    "from": "rachel.brown@lawfirm.com",
+    "to": "client@lawfirm.com",
+    "subject": "Document Review Request",
+    "body": "Dear [Client Name], \n\nPlease review the attached document and provide your feedback by 10/25. Let me know if you have any questions. \n\nBest regards, \nRachel Brown"
+},
+{
+    "from": "operations@company.com",
+    "to": "warehouse@company.com",
+    "subject": "Inventory Check - 10/23",
+    "body": "Hi Warehouse Team, \n\nWe need to complete a full inventory check on October 23rd. Please ensure all stock is accurately counted and updated in the system. \n\nBest, \nOperations Team"
+},
+{
+    "from": "clubpresident@university.edu",
+    "to": "members@university.edu",
+    "subject": "Club Meeting - 10/18",
+    "body": "Hi Everyone, \n\nDon’t forget about our club meeting on October 18th at 5 PM in Room 205. We’ll be discussing plans for the upcoming event. \n\nSee you there! \nClub President"
+},
+{
+    "from": "prof.johnson@school.edu",
+    "to": "students@school.edu",
+    "subject": "Class Field Trip Reminder",
+    "body": "Dear Students, \n\nThis is a reminder about our field trip on 10/20. Please meet at the main gate by 8 AM. Don't forget to bring your permission slips! \n\nBest, \nProfessor Johnson"
+},
+{
+    "from": "kate@hrconsulting.com",
+    "to": "client@hrconsulting.com",
+    "subject": "Performance Review Proposal",
+    "body": "Dear [Client Name], \n\nAttached is the performance review proposal we discussed. Please review and let me know if any revisions are needed before our meeting on 10/25. \n\nBest regards, \nKate"
+},
+{
+    "from": "board@association.org",
+    "to": "members@association.org",
+    "subject": "Annual General Meeting - 11/10",
+    "body": "Dear Members, \n\nOur Annual General Meeting will be held on November 10th at 10:00 AM at the Community Hall. Your attendance is highly appreciated. \n\nBest, \nBoard of Directors"
+},
+{
+    "from": "lily@travelagency.com",
+    "to": "customer@travelagency.com",
+    "subject": "Flight Booking Confirmation",
+    "body": "Dear [Customer Name], \n\nYour flight booking has been confirmed. Please find your itinerary and e-ticket attached. \n\nThank you for choosing our agency! \n\nBest, \nLily"
+},
+{
+    "from": "team@project.com",
+    "to": "members@project.com",
+    "subject": "Weekly Project Sync - 10/20",
+    "body": "Hi Team, \n\nOur next weekly sync is scheduled for October 20th at 11:00 AM. Please update your progress in the shared document before the meeting. \n\nBest, \nProject Team"
+},
+{
+    "from": "customer-service@retail.com",
+    "to": "client@retail.com",
+    "subject": "Refund Processed - Order #45678",
+    "body": "Dear [Client Name], \n\nWe have processed your refund for order #45678. Please allow 5-7 business days for the amount to reflect in your account. \n\nBest regards, \nCustomer Service"
+},
+{
+    "from": "admin@university.edu",
+    "to": "students@university.edu",
+    "subject": "Library System Maintenance - 10/29",
+    "body": "Dear Students, \n\nThe library system will be down for maintenance on October 29th from 8 AM to 12 PM. We apologize for the inconvenience. \n\nBest, \nUniversity Admin"
 }
 ]
