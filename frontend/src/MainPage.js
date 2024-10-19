@@ -115,16 +115,18 @@ function MainPage() {
         <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
       )}
       {searchResults?.metadatas && (
-        <List className="List">
-          {searchResults.distances[0]?.filter((distance, index) => distance <= 0.5).map((distance, index) => {
-            return (
-              <React.Fragment key={index}>
-                <ResultEmail searchResult={searchResults.metadatas[0][index]} />
-                <Divider />
-              </React.Fragment>
-            );
-          })}
-        </List>
+        searchResults.distances[0]?.some(distance => distance <= 0.5) ? (
+          <List className="List">
+            {searchResults.distances[0]?.filter((distance, index) => distance <= 0.5).map((distance, index) => {
+              return (
+                <React.Fragment key={index}>
+                  <ResultEmail searchResult={searchResults.metadatas[0][index]} />
+                  <Divider />
+                </React.Fragment>
+              );
+            })}
+          </List>
+        ) : null
       )}
       {languageModelResponse && (
         <Box style={{
