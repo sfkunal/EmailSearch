@@ -77,7 +77,7 @@ function MainPage() {
     }}>
       <TypewriterTypography
         text={languageModelResponse}
-        delay={30}
+        delay={20}
         style={{
           paddingTop: '5px',
           paddingBottom: '5px',
