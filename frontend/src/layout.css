@@ -62,3 +62,31 @@ html, body {
   .SearchBar button:hover {
     background-color: #1565c0;
   }
+
+  .List {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin-top: 20px;
+  }
+
+  .ListItem {
+    background-color: transparent;
+    border: none;
+    padding: 10px;
+  }
+
+  .ListItemText {
+    color: #333;
+  }
+
+  .ListItemIcon {
+    min-width: 0;
+    opacity: 0.6;
+  }
+
+  .ListItemSecondaryAction {
+    opacity: 0.6;
+  }
