@@ -74,33 +74,35 @@ const SearchBar = ({ setSearchResults, setLanguageModelResponse }) => {
   );
 };
 
-const ResultEmail = ({ searchResult, onClick }) => {
+const ResultEmail = ({ searchResult, onClick, index, animationTrigger }) => {
   const truncateBody = (body) => {
     if (!body || body.length <= 150) return body;
     return `${body.substring(0, 150)}...`;
   };
   
   return (
-    <ListItem 
-      className="ListItem" 
-      onClick={onClick}
-    >
-      <ListItemText
-        primary={searchResult.subject}
-        secondary={
-          <React.Fragment>
-            <Typography
-              component="span"
-              variant="body2"
-              sx={{ color: 'text.primary', display: 'inline' }}
-            >
-              {searchResult.to}
-            </Typography>
-            {` - ${truncateBody(searchResult.body)} `}
-          </React.Fragment>
-        }
-      />
-    </ListItem>
+    <div className={`result-email fade-in`} style={{animationDelay: `${index * 100}ms`}} key={animationTrigger}>
+      <ListItem 
+        alignItems="flex-start"
+        onClick={onClick}
+      >
+        <ListItemText
+          primary={searchResult.subject}
+          secondary={
+            <React.Fragment>
+              <Typography
+                component="span"
+                variant="body2"
+                sx={{ color: 'text.primary', display: 'inline' }}
+              >
+                {searchResult.from}
+              </Typography>
+              {` - ${truncateBody(searchResult.body)} `}
+            </React.Fragment>
+          }
+        />
+      </ListItem>
+    </div>
   );
 };
 
@@ -108,6 +110,7 @@ function MainPage() {
   const [searchResults, setSearchResults] = useState(null);
   const [languageModelResponse, setLanguageModelResponse] = useState(null);
   const [selectedEmail, setSelectedEmail] = useState(null);
+  const [animationTrigger, setAnimationTrigger] = useState(0);
 
   const handleEmailClick = (email) => {
     console.log('Clicked email:', email);
@@ -124,6 +127,12 @@ function MainPage() {
   React.useEffect(() => {
     loadImage();
   }, []);
+
+  React.useEffect(() => {
+    if (searchResults) {
+      setAnimationTrigger(prev => prev + 1);
+    }
+  }, [searchResults]);
 
   return (
     <div className="MainPage">
@@ -142,6 +151,8 @@ function MainPage() {
                   <ResultEmail 
                     searchResult={searchResults.metadatas[0][index]}
                     onClick={() => handleEmailClick(searchResults.metadatas[0][index])}
+                    index={index}
+                    animationTrigger={animationTrigger}
                   />
                   <Divider />
                 </React.Fragment>

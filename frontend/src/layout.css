@@ -178,3 +178,22 @@ max-width: 100%;
 overflow-x: auto;
 
 }
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-email {
+  opacity: 0;
+}
+
+.result-email.fade-in {
+  animation: fadeInDown 0.8s ease-out forwards;
+}
