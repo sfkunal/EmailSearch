@@ -126,7 +126,27 @@ function MainPage() {
           })}
         </List>
       )}
-      {languageModelResponse && (<p style={{ color: 'white', textAlign: 'center' }}>{languageModelResponse}</p>)}
+      {languageModelResponse && (
+        <Box style={{
+          backgroundColor: '#E0E0E0',
+          borderRadius: '12px',
+          marginTop: '25px',
+          marginBottom: '25px',
+          opacity: '0.6'
+        }}>
+          <Typography style={{
+            paddingTop: '5px',
+            paddingBottom: '5px',
+            color: 'black',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: '20px',
+            fontFamily: 'Arial, sans-serif'
+          }}>
+            {languageModelResponse}
+          </Typography>
+        </Box>
+      )}
       {searchResults && (
         <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
       )}
