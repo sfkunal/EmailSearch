@@ -143,9 +143,9 @@ function MainPage() {
       <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
 
       {searchResults?.metadatas && (
-        searchResults.distances[0]?.some(distance => distance <= 0.5) ? (
+        searchResults.distances[0]?.some(distance => distance <= 0.65) ? (
           <List className="List">
-            {searchResults.distances[0]?.filter((distance, index) => distance <= 0.5).map((distance, index) => {
+            {searchResults.distances[0]?.filter((distance, index) => distance <= 0.65).map((distance, index) => {
               return (
                 <React.Fragment key={index}>
                   <ResultEmail 
