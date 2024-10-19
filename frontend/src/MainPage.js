@@ -11,6 +11,7 @@ import ListItem from '@mui/material/ListItem/index.js';
 import Divider from '@mui/material/Divider/index.js';
 import ListItemText from '@mui/material/ListItemText/index.js';
 import Typography from '@mui/material/Typography/index.js';
+import EmailModal from './EmailModal.js';
 
 const SearchBar = ({ setSearchResults, setLanguageModelResponse }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -64,13 +65,13 @@ const SearchBar = ({ setSearchResults, setLanguageModelResponse }) => {
   );
 };
 
-const ResultEmail = ({ searchResult }) => {
+const ResultEmail = ({ searchResult, handleOpenModal }) => {
   const truncateBody = (body) => {
     if (!body || body.length <= 150) return body;
     return `${body.substring(0, 150)}...`;
   };
   return (
-    <ListItem className="ListItem">
+    <ListItem button="true" onClick={handleOpenModal(searchResult)} className="ListItem">
       <ListItemText
         primary={searchResult.subject}
         secondary={
@@ -88,11 +89,27 @@ const ResultEmail = ({ searchResult }) => {
       />
     </ListItem>
   );
-}
+};
 
 function MainPage() {
   const [searchResults, setSearchResults] = useState(null);
   const [languageModelResponse, setLanguageModelResponse] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedEmail, setSelectedEmail] = useState(null);
+
+  React.useEffect(() => {
+    console.log(selectedEmail);
+  }, [selectedEmail]);
+
+  const handleOpenModal = (email) => {
+    setSelectedEmail(email);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedEmail(null);
+  };
 
   const loadImage = () => {
     const img = document.createElement('img');
@@ -115,12 +132,12 @@ function MainPage() {
         <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
       )}
       {searchResults?.metadatas && (
-        searchResults.distances[0]?.some(distance => distance <= 0.5) ? (
+        searchResults.distances[0]?.some(distance => distance <= 0.7) ? (
           <List className="List">
-            {searchResults.distances[0]?.filter((distance, index) => distance <= 0.5).map((distance, index) => {
+            {searchResults.distances[0]?.filter((distance, index) => distance <= 0.7).map((distance, index) => {
               return (
                 <React.Fragment key={index}>
-                  <ResultEmail searchResult={searchResults.metadatas[0][index]} />
+                  <ResultEmail searchResult={searchResults.metadatas[0][index]} handleOpenModal={handleOpenModal} />
                   <Divider />
                 </React.Fragment>
               );
@@ -128,6 +145,11 @@ function MainPage() {
           </List>
         ) : null
       )}
+      <EmailModal 
+        isOpen={showModal} 
+        onClose={handleCloseModal} 
+        content={selectedEmail}
+      />
       {languageModelResponse && (
         <Box style={{
           backgroundColor: '#E0E0E0',
