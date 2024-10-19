@@ -3,6 +3,7 @@ from pathlib import Path
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
+from google.oauth2 import id_token
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -99,13 +100,20 @@ class GmailAPI:
         except HttpError as error:
             print(f"Error in loading Gmail API service: {error}")
 
-    def get_emails(self, count = 100) -> list[EmailData]:
+    def login(self):
+        self.flow = InstalledAppFlow()
+        """
+
+        
+        """
+
+    def get_emails(self, count = 100) -> tuple[list[EmailData], list[str]]:
         current_user = self.service.users().messages().list(userId="me", maxResults=count).execute()
         messages = current_user.get("messages", [])
 
         data = []
         for message in messages:
-            payload = gmail.service.users().messages().get(userId="me", id=message["id"], format="full").execute()["payload"]
+            payload = self.service.users().messages().get(userId="me", id=message["id"], format="full").execute()["payload"]
             headers = payload["headers"]
             body = payload["body"]
             # print(headers)
@@ -128,7 +136,8 @@ class GmailAPI:
                 for part in parts:
                     headers = part["headers"]
                     # print("!!!!!!!!", part["body"]) #header_value(headers, "Content-Type"))
-                    if part["filename"]:
+                    if part["filename"] and header_value(headers, "Content-Type").startswith("image"):
+                        # print(headers)
                         attachment_id = part["body"]["attachmentId"]
                         attachment_ref = self.service.users().messages().attachments().get(userId="me", messageId=data[-1].message_id, id=attachment_id).execute()
                         decode_and_save_attachments(attachment_ref, Path("./backend/data/images/") / part["filename"])
@@ -141,21 +150,27 @@ class GmailAPI:
                         )
                     )
 
+        all_image_urls = []
         for email in data:
+            all_image_urls.append([])
             if "text/html" in email.content_type:
                 email.body, image_urls = process_html(email.body)
-                print("========", image_urls)
+                all_image_urls[-1].append(image_urls)
+                # print("========", image_urls)
             for attachment in email.attachments:
                 if "text/html" in attachment.content_type:
                     attachment.body, image_urls = process_html(attachment.body)
-                    print("<<<<<<<", image_urls)
-        return data
+                    all_image_urls[-1].append(image_urls)
+                    # print("<<<<<<<", image_urls)
+
+        print(all_image_urls)
+        return data, all_image_urls
 
 
 if __name__ == "__main__":
     gmail = GmailAPI()
-
-    for mail in gmail.get_emails(count=3):
-        print(mail)
+    emails, image_urls = gmail.get_emails(count=3)
+    for mail, image_urls in zip(emails, image_urls):
+        print(image_urls)
         print()
 
