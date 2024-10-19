@@ -22,43 +22,27 @@ const SearchBar = ({ searchResults, setSearchResults }) => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, margin: 2 }}>
+    <div className="SearchBar">
       <TextField
         id="search-bar"
-        className="text"
         value={searchQuery}
         onChange={handleChange}
         label="How can I help you?"
         variant="outlined"
         placeholder="Search Mail"
-        sx={{
-          '& .MuiOutlinedInput-root': {
-            borderRadius: '20px',
-            backgroundColor: '#f0f0f0',
-            '& fieldset': {
-              borderColor: 'transparent',
-            },
-            '&:hover fieldset': {
-              borderColor: 'transparent',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: 'primary.main',
-            },
-          },
-        }}
       />
-      <Button variant="contained" color="primary" type="button" onClick={handleClick}>
+      <Button variant="contained" color="primary" onClick={handleClick}>
         Submit
       </Button>
-    </Box>
+    </div>
   );
-}
+};
 
 function MainPage() {
   const [searchResults, setSearchResults] = useState([]);
 
   return (
-    <div>
+    <div className="MainPage">
       <h1>Welcome to Your Electron React App</h1>
       <SearchBar searchResults={searchResults} setSearchResults={setSearchResults} />
       {/* Add more components and content here */}
