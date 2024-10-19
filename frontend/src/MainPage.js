@@ -96,7 +96,7 @@ function MainPage() {
 
   const loadImage = () => {
     const img = document.createElement('img');
-    img.src = '/scopeLogo.jpg'; // Replace with your actual image path
+    img.src = '/scopeLogo.jpg'; 
     img.className = 'topRightImage';
     document.body.appendChild(img);
   };
