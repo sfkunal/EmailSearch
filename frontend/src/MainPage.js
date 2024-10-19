@@ -116,12 +116,14 @@ function MainPage() {
       )}
       {searchResults?.metadatas && (
         <List className="List">
-          {searchResults.metadatas[0].map((result, index) => (
-            <React.Fragment key={index}>
-              <ResultEmail searchResult={result} />
-              <Divider />
-            </React.Fragment>
-          ))}
+          {searchResults.distances[0]?.filter((distance, index) => distance <= 0.5).map((distance, index) => {
+            return (
+              <React.Fragment key={index}>
+                <ResultEmail searchResult={searchResults.metadatas[0][index]} />
+                <Divider />
+              </React.Fragment>
+            );
+          })}
         </List>
       )}
       {languageModelResponse && (<p style={{ color: 'white', textAlign: 'center' }}>{languageModelResponse}</p>)}
