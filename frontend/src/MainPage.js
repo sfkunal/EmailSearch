@@ -18,7 +18,7 @@ function MainPage() {
   const [userEmail, setUserEmail] = useState(null);
 
   const handleEmailClick = (email) => {
-    console.log('Clicked email:', email);
+    // console.log('Clicked email:', email);
     setSelectedEmail(email);
   };
 
@@ -38,7 +38,7 @@ function MainPage() {
       try {
         const response = await fetch('http://127.0.0.1:5000/is_logged_in');
         const data = await response.json();
-        console.log('Authentication data:', data);
+        // console.log('Authentication data:', data);
         setIsAuthenticated(data.is_logged_in);
         if (data.is_logged_in) {
           setUserEmail(data.email);
@@ -61,9 +61,7 @@ function MainPage() {
     }
   }, [searchResults]);
 
-  const handleSuccess = async (credentialResponse) => {
-    console.log("Login Success", credentialResponse);
-
+  const handleSuccess = async () => {
     const url = "http://127.0.0.1:5000/login";
 
     try {
@@ -94,23 +92,21 @@ function MainPage() {
       <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
 
       {searchResults?.metadatas && (
-        searchResults.distances[0]?.some(distance => distance <= 0.65) ? (
-          <List className="List">
-            {searchResults.distances[0]?.filter((distance, index) => distance <= 0.65).map((distance, index) => {
-              return (
-                <React.Fragment key={index}>
-                  <ResultEmail
-                    searchResult={searchResults.metadatas[0][index]}
-                    onClick={() => handleEmailClick(searchResults.metadatas[0][index])}
-                    index={index}
-                    animationTrigger={animationTrigger}
-                  />
-                  <Divider />
-                </React.Fragment>
-              );
-            })}
-          </List>
-        ) : null
+        <List className="List">
+          {searchResults.metadatas[0].map((metadata, index) => {
+            return (
+              <React.Fragment key={index}>
+                <ResultEmail
+                  searchResult={metadata}
+                  onClick={() => handleEmailClick(metadata)}
+                  index={index}
+                  animationTrigger={animationTrigger}
+                />
+                <Divider />
+              </React.Fragment>
+            );
+          })}
+        </List>
       )}
       {languageModelResponse && (
         <div style={{ maxWidth: '100%', overflow: 'hidden', textAlign: 'left' }}>

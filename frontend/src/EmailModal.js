@@ -9,7 +9,7 @@ const Modal = ({ isOpen, onClose, content }) => {
         <button onClick={onClose}>x</button>
         <h2>{content.subject}</h2>
         <p>{content.from}</p>
-        <pre>{content.body}</pre>
+        <pre>{content.body.replace(/\s+/g, ' ')}</pre>
       </div>
     </div>
   );

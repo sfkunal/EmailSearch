@@ -54,10 +54,10 @@ app.whenReady().then(() => {
     }
     if (searchWindow.isVisible()) {
       searchWindow.hide();
-      console.log("Search window hidden");
+      // console.log("Search window hidden");
     } else {
       searchWindow.show();
-      console.log("Search window shown");
+      // console.log("Search window shown");
     }
   });
 });
