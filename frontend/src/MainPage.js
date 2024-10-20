@@ -36,6 +36,21 @@ function MainPage() {
   };
 
   React.useEffect(() => {
+    async function checkAuth() {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/is_logged_in');
+        const data = await response.json();
+        console.log('Authentication data:', data);
+        setIsAuthenticated(data.is_logged_in);
+      } catch (error) {
+        console.error('Error checking authentication:', error);
+      }
+    }
+    checkAuth();
+  }, []);
+
+
+  React.useEffect(() => {
     loadImage();
   }, []);
 
@@ -45,23 +60,30 @@ function MainPage() {
     }
   }, [searchResults]);
 
-  const handleSuccess = (credentialResponse) => {
+  const handleSuccess = async (credentialResponse) => {
     console.log("Login Success", credentialResponse);
-    setIsAuthenticated(true);
-    // fetch('http://localhost:5000/auth/google', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({ credential: credentialResponse.credential, clientId: credentialResponse.clientId }),
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log('Success:', data);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error:', error);
-    //   });
+  
+    const url = "http://127.0.0.1:5000/login";
+    
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      const open_url = data.url;
+      window.open(open_url, '_blank');
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
   };
 
   const handleError = () => {
@@ -127,14 +149,16 @@ function MainPage() {
           left: '20px',
           margin: 'auto',
         }}>
-          <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
+          {/* <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
             <div>
               <GoogleLogin
                 onSuccess={handleSuccess}
                 onError={handleError}
               />
             </div>
-          </GoogleOAuthProvider>
+          </GoogleOAuthProvider> */}
+          {/* button when clicked, calls login callback */}
+          <button onClick={() => handleSuccess({ credential: 'fake', clientId: 'fake' })}>Login</button>
         </div>
       )}
       <EmailModal isOpen={!!selectedEmail} onClose={() => setSelectedEmail(null)} content={selectedEmail} />

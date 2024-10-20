@@ -15,7 +15,6 @@ import re
 from dataclasses import dataclass
 
 
-
 @dataclass
 class AttachmentData:
     body: str
@@ -34,7 +33,6 @@ class EmailData:
     attachments: list[AttachmentData]
 
 
-
 TEMP_IMG_PATH = Path("./backend/data/images/")
 
 
@@ -45,29 +43,31 @@ def header_value(header: dict, header_name: str):
         return None
     else:
         return header[ind]["value"]
-    
 
-def process_html(html: str) -> tuple[str, list[str]]:  # (processed content, image links)
+
+# (processed content, image links)
+def process_html(html: str) -> tuple[str, list[str]]:
     if html is None:
         return None
-    
+
     html = re.sub(r"[\r\n\t]", " ", html)
     image_urls = re.findall(r'<img.*src="(?P<url>https?://[^\s]+)".*/?>', html)
     html = re.sub(r"<style.*>.*</style>", " ", html)
     html = re.sub(r"<.*?>", r" ", html)
     html = html.replace("      ", " ")
 
-    image_urls = [image_url for image_url in image_urls if image_url.split(".")[-1].lower() in ["png", "jpg", "gif", "tif", "bmp", "tiff"]]
-    
+    image_urls = [image_url for image_url in image_urls if image_url.split(
+        ".")[-1].lower() in ["png", "jpg", "gif", "tif", "bmp", "tiff"]]
+
     return html, image_urls
-    
+
 
 def decode_body(body: dict):
     if body.get("data", None) is not None:
         value = base64.urlsafe_b64decode(body["data"]).decode("utf-8")
         value = re.sub(r"[\r\n]", " ", value)
         return value
-    
+
 
 def decode_and_save_attachments(body: dict, filename: str) -> str:
     uri = TEMP_IMG_PATH / filename
@@ -100,7 +100,7 @@ class GmailAPI:
         self.auth_state = None
         self.creds = None
         self.service = None
-        
+
     def login(self) -> str:
         # print("LOGIN?")
         auth_url = ""
@@ -109,9 +109,10 @@ class GmailAPI:
         # created automatically when the authorization flow completes for the first
         # time.
         if os.path.exists("token.json"):
-            self.creds = Credentials.from_authorized_user_file("token.json", self.SCOPES)
+            self.creds = Credentials.from_authorized_user_file(
+                "token.json", self.SCOPES)
             self.instantiate()
-        
+
         # If there are no (valid) credentials available, let the user log in.
         if not self.creds or not self.creds.valid:
             if self.creds and self.creds.expired and self.creds.refresh_token:
@@ -127,14 +128,9 @@ class GmailAPI:
                     prompt='select_account'
                 )
                 print(self.auth_state)
-            
-            if self.creds:
-                # Save the credentials for the next run
-                with open("token.json", "w") as token:
-                    token.write(self.creds.to_json())
 
         return auth_url
-        
+
     def login_callback(self, auth_resp):
         flow = InstalledAppFlow.from_client_secrets_file(
             "credentials.json", scopes=GmailAPI.SCOPES, state=self.auth_state)
@@ -148,14 +144,29 @@ class GmailAPI:
     def instantiate(self):
         try:
             # Call the Gmail API
+            with open("token.json", "w") as token:
+                token.write(self.creds.to_json())
             self.service = build("gmail", "v1", credentials=self.creds)
 
         except HttpError as error:
             print(f"Error in loading Gmail API service: {error}")
 
+    def get_email(self):
+        if self.creds and self.creds.valid:
+            try:
+                profile = self.service.users().getProfile(userId='me').execute()
+                email_address = profile.get('emailAddress')
+                return email_address
+            except HttpError as error:
+                print(f"An error occurred: {error}")
+                return None
+        else:
+            print("No valid credentials found.")
+            return None
 
-    def get_emails(self, count = 100) -> tuple[list[EmailData], list[str]]:
-        current_user = self.service.users().messages().list(userId="me", maxResults=count).execute()
+    def get_emails(self, count=100) -> tuple[list[EmailData], list[str]]:
+        current_user = self.service.users().messages().list(
+            userId="me", maxResults=count).execute()
         messages = current_user.get("messages", [])
         image_uris = []
 
@@ -163,7 +174,8 @@ class GmailAPI:
         for message in messages:
             image_uris.append([])
 
-            payload = self.service.users().messages().get(userId="me", id=message["id"], format="full").execute()["payload"]
+            payload = self.service.users().messages().get(
+                userId="me", id=message["id"], format="full").execute()["payload"]
             headers = payload["headers"]
             body = payload["body"]
             # print(headers)
@@ -189,9 +201,11 @@ class GmailAPI:
                     if part["filename"] and header_value(headers, "Content-Type").startswith("image"):
                         # print(headers)
                         attachment_id = part["body"]["attachmentId"]
-                        attachment_ref = self.service.users().messages().attachments().get(userId="me", messageId=data[-1].message_id, id=attachment_id).execute()
+                        attachment_ref = self.service.users().messages().attachments().get(
+                            userId="me", messageId=data[-1].message_id, id=attachment_id).execute()
 
-                        uri = decode_and_save_attachments(attachment_ref, part["filename"])
+                        uri = decode_and_save_attachments(
+                            attachment_ref, part["filename"])
                         image_uris[-1].append(uri)
 
                     body = part["body"]
@@ -210,7 +224,8 @@ class GmailAPI:
                 # print("========", image_urls)
             for attachment in email.attachments:
                 if "text/html" in attachment.content_type:
-                    attachment.body, attachment_img_urls = process_html(attachment.body)
+                    attachment.body, attachment_img_urls = process_html(
+                        attachment.body)
                     img_urls += attachment_img_urls
                     # print("<<<<<<<", image_urls)
             image_uris[i] += download_images(img_urls)
@@ -224,7 +239,7 @@ def debug_generate_token_json():
         "credentials.json", GmailAPI.SCOPES
     )
     creds = flow.run_local_server(port=0)
-    
+
     if creds:
         # Save the credentials for the next run
         with open("token.json", "w") as token:
@@ -233,11 +248,10 @@ def debug_generate_token_json():
 
 if __name__ == "__main__":
     # debug_generate_token_json()
-    
+
     gmail = GmailAPI()
     gmail.login()
     emails, image_urls = gmail.get_emails(count=50)
     for mail, image_urls in zip(emails, image_urls):
         print(image_urls)
         print()
-

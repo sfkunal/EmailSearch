@@ -4,7 +4,7 @@ import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction, OpenCLIPEmbeddingFunction
 from chromadb.utils.data_loaders import ImageLoader
 from groq import Groq
-
+import os
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 import logging
@@ -25,7 +25,7 @@ GROQ_API_KEY = CONFIG["SECRETS"]["GROQ_API_KEY"]
 # flask --app backend/main --debug run
 
 app = Flask(__name__)
-CORS(app, origins="*")
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 
 groq_client = Groq(
@@ -34,9 +34,7 @@ groq_client = Groq(
 
 gmail = GmailAPI()
 
-
-
-
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = '1'
 
 
 embedder = SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
@@ -92,14 +90,14 @@ def synth_initialize():
         for id, d in enumerate(data):
             merged_data = d["subject"]+" "+re.sub(r"[\n]", " ", d["body"])
             email_collection.add(
-                documents=[merged_data], # we embed for you, or bring your own
+                documents=[merged_data],  # we embed for you, or bring your own
                 metadatas=[{
                     "from": d["from"],
                     "to": d["to"],
                     "subject": d["subject"],
                     "body": d["body"],
-                }], # filter on arbitrary metadata!
-                ids=[str(id)], # must be unique for each doc
+                }],  # filter on arbitrary metadata!
+                ids=[str(id)],  # must be unique for each doc
             )
 
 
@@ -112,7 +110,8 @@ def initialize_live_data():
         for id, (email, image_urls) in enumerate(zip(emails, image_urls)):
             try:
                 if email.body is not None:
-                    merged_data = email.subject + " " + re.sub(r"[\n]", " ", email.body)
+                    merged_data = email.subject + " " + \
+                        re.sub(r"[\n]", " ", email.body)
                     email_collection.add(
                         documents=[merged_data],
                         metadatas=[{
@@ -131,7 +130,8 @@ def initialize_live_data():
                                 email_collection.add(
                                     uris=uris,
                                     metadatas=[{"email": str(id)}],
-                                    ids=[str(id) + "I" + str(iid) for iid in range(len(uris))]
+                                    ids=[str(id) + "I" + str(iid)
+                                         for iid in range(len(uris))]
                                 )
                         except Exception as e:
                             logging.error(f"Error downloading image: {e}")
@@ -155,8 +155,9 @@ def return_result():
         query_texts=[query],
         n_results=5,
     )
-    
+
     return results
+
 
 @app.post('/message')
 def ai_message():
@@ -166,14 +167,11 @@ def ai_message():
 
     results = email_collection.get(
         ids=ids.split(","),
-        # where={"style": "style1"}
     )
 
     textual_data = ""
     for ind, metadata in enumerate(results["metadatas"]):
         textual_data += f"[#{ind}] An email sent from {metadata['from']} to {metadata['to']} with subject line {metadata['subject']} with content of <<<{metadata['body']}>>>\n"
-
-    # print(textual_data)
 
     chat_completion = groq_client.chat.completions.create(
         messages=[
@@ -194,24 +192,37 @@ def ai_message():
     return {"response": response}
 
 
+@app.route('/is_logged_in')
+def is_logged_in():
+    result = {}
+    if gmail.creds is not None:
+        result["is_logged_in"] = True
+        result["email"] = gmail.get_email()
+    else:
+        result["is_logged_in"] = False
+    return result
+
+
 @app.route("/login")
+@cross_origin()
 def login():
     auth_url = gmail.login()
 
     if auth_url:
-        return redirect(auth_url)
+        return {"url": auth_url}
     return {}
+
 
 @app.route("/callback")
 def callback():
     if request.args.get('state') != gmail.auth_state:
         raise Exception('Invalid state')
-    
+
     gmail.login_callback(request.url)
 
     initialize_live_data()
 
-    return redirect(url_for("index"))
+    return redirect("http://localhost:3000")
 
 # synth_initialize()
 # initialize_live_data()
