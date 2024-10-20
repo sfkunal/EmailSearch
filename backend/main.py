@@ -130,6 +130,10 @@ def initialize_live_data():
                         email_collection.upsert(
                             documents=[attachment.body],
                             metadatas=[{
+                                "from": email.from_,
+                                "to": email.to,
+                                "subject": email.subject,
+                                "body": email.body,
                                 "email_ref": str(id),
                                 "content_type": attachment.content_type,
                             }],
