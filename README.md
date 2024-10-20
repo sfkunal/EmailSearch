@@ -1,4 +1,4 @@
-# Scope Search 🔭👁️
+# Scope Search 📧🔭👁️
 
 > Kunal Srivastava, Ayaan Rahim, Connor Chan, Andrew Shen
 ---
