@@ -7,9 +7,6 @@ import EmailModal from './EmailModal.js';
 import SearchBar from './components/SearchBar.js';
 import ResultEmail from './components/ResultEmail.js';
 import TypewriterTypography from './components/TypewriterTypography.js';
-import { GoogleLogin } from '@react-oauth/google';
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import { config } from './config.js';
 import Greeting from './components/Greeting.js';
 
 function MainPage() {
@@ -18,6 +15,7 @@ function MainPage() {
   const [selectedEmail, setSelectedEmail] = useState(null);
   const [animationTrigger, setAnimationTrigger] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userEmail, setUserEmail] = useState(null);
 
   const handleEmailClick = (email) => {
     console.log('Clicked email:', email);
@@ -42,6 +40,9 @@ function MainPage() {
         const data = await response.json();
         console.log('Authentication data:', data);
         setIsAuthenticated(data.is_logged_in);
+        if (data.is_logged_in) {
+          setUserEmail(data.email);
+        }
       } catch (error) {
         console.error('Error checking authentication:', error);
       }
@@ -62,9 +63,9 @@ function MainPage() {
 
   const handleSuccess = async (credentialResponse) => {
     console.log("Login Success", credentialResponse);
-  
+
     const url = "http://127.0.0.1:5000/login";
-    
+
     try {
       const response = await fetch(url, {
         method: 'GET',
@@ -73,21 +74,17 @@ function MainPage() {
           'Content-Type': 'application/json',
         },
       });
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
       const open_url = data.url;
       window.open(open_url, '_blank');
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
     }
-  };
-
-  const handleError = () => {
-    console.log('Login Failed');
   };
 
   return (
@@ -144,21 +141,20 @@ function MainPage() {
           </Box>
         </div>
       )}
-      {!isAuthenticated && (
+      {!isAuthenticated ? (
         <div className="google-auth-container" style={{
           left: '20px',
           margin: 'auto',
         }}>
-          {/* <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
-            <div>
-              <GoogleLogin
-                onSuccess={handleSuccess}
-                onError={handleError}
-              />
-            </div>
-          </GoogleOAuthProvider> */}
-          {/* button when clicked, calls login callback */}
           <button onClick={() => handleSuccess({ credential: 'fake', clientId: 'fake' })}>Login</button>
+        </div>
+      ) : (
+        <div className="google-auth-container" style={{
+          left: '5px',
+          top: '20px',
+          margin: 'auto',
+        }}>
+          <p style={{ color: 'white', fontWeight: 'bold' }}>{userEmail}</p>
         </div>
       )}
       <EmailModal isOpen={!!selectedEmail} onClose={() => setSelectedEmail(null)} content={selectedEmail} />

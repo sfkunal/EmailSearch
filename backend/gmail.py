@@ -231,6 +231,9 @@ class GmailAPI:
             image_uris[i] += download_images(img_urls)
 
         print(image_uris)
+        # write data to a file
+        with open("data.txt", "w") as fobj:
+            fobj.write(str(data))
         return data, image_uris
 
 
