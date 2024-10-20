@@ -44,8 +44,8 @@ data_loader = ImageLoader()
 chromadb_client = chromadb.Client()
 email_collection = chromadb_client.create_collection(
     "email_collection",
-    metadata={"hnsw:space": "cosine"},
-    embedding_function=multimodal_embedder
+    metadata={"hnsw:space": "l2"},
+    embedding_function=embedder,
 )
 
 
@@ -112,35 +112,33 @@ def initialize_live_data():
 
         for id, (email, image_urls) in enumerate(zip(emails, image_urls)):
             try:
-                if email.body is not None:
-                    merged_data = email.subject + " " + \
-                        re.sub(r"[\n]", " ", email.body)
+                merged_data = email.subject + " " + re.sub(r"[\n]", " ", default(email.body))
+                email_collection.upsert(
+                    documents=[merged_data],
+                    metadatas=[{
+                        "from": default(email.from_),
+                        "to": default(email.to),
+                        "subject": default(email.subject),
+                        "body": default(email.body),
+                    }],
+                    ids=[str(id)]
+                )
+
+                # print("ATTACHMENTS:", len(email.attachments))
+                for iid, attachment in enumerate(email.attachments):
+                    merged_data = email.subject + " " + re.sub(r"[\n]", " ", default(attachment.body))
                     email_collection.upsert(
                         documents=[merged_data],
                         metadatas=[{
                             "from": default(email.from_),
                             "to": default(email.to),
                             "subject": default(email.subject),
-                            "body": default(email.body),
+                            "body": default(attachment.body),
+                            "content_type": default(attachment.content_type),
+                            "email_ref": str(id),
                         }],
-                        ids=[str(id)]
+                        ids=[str(id) + "A" + str(iid)]
                     )
-
-                # print("ATTACHMENTS:", len(email.attachments))
-                for iid, attachment in enumerate(email.attachments):
-                    if attachment.body is not None:
-                        email_collection.upsert(
-                            documents=[attachment.body],
-                            metadatas=[{
-                                "from": default(email.from_),
-                                "to": default(email.to),
-                                "subject": default(email.subject),
-                                "body": default(email.body),
-                                "content_type": default(attachment.content_type),
-                                "email_ref": str(id),
-                            }],
-                            ids=[str(id) + "A" + str(iid)]
-                        )
 
                 for image_url in image_urls:
                     try:
@@ -174,6 +172,22 @@ def return_result():
         query_texts=[query],
         n_results=5,
     )
+
+    # remove duplicate email if the attachment is present with the associated email
+    # remove any attachment with same email_ref below
+    # NOTE: There might be multiple attachments of the same email (we can aggregate them into one if needed or do something about it)
+    for metadata in results["metadatas"][0]:
+        print(results["metadatas"][0])
+        print(metadata)
+        if (email_ref := metadata.get("email_ref", None)) is not None:
+            # this result item is an attachment
+            if email_ref in results["ids"][0]:
+                # the email associated from this attachment is present
+                email_ind = results["ids"][0].index(email_ref)
+                del results["distances"][0][email_ind]
+                del results["documents"][0][email_ind]
+                del results["ids"][0][email_ind]
+                del results["metadatas"][0][email_ind]
 
     return results
 
