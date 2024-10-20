@@ -8,3 +8,4 @@ token.json
 backend/data/images
 frontend/src/config.js
 data.txt
+chroma.log
