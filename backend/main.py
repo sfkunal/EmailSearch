@@ -7,6 +7,7 @@ from groq import Groq
 
 from google_auth_oauthlib.flow import InstalledAppFlow
 
+import logging
 import json
 import re
 import configparser
@@ -15,6 +16,7 @@ from pathlib import Path
 
 from gmail import GmailAPI
 
+logging.basicConfig(level=logging.INFO)
 
 CONFIG = configparser.ConfigParser()
 CONFIG.read("TOKENS.ini")
@@ -114,33 +116,47 @@ def synth_initialize():
 
 
 def initialize_live_data():
-    print("STARTS")
-    emails, image_urls = gmail.get_emails(count=50)
-    print("ENDS")
-    for id, (email, image_urls) in enumerate(zip(emails, image_urls)):
-        if email.body is not None:
-            merged_data = email.subject+" "+re.sub(r"[\n]", " ", email.body)
-            email_collection.add(
-                documents=[merged_data],
-                metadatas=[{
-                    "from": email.from_,
-                    "to": email.to,
-                    "subject": email.subject,
-                    "body": email.body,
-                }],
-                ids=[str(id)]
-            )
+    try:
+        print("STARTS")
+        emails, image_urls = gmail.get_emails(count=100)
+        print("ENDS")
 
-        for image_url in image_urls:
-            uris = download_images([image_url])
-            if len(uris) > 0:
-                email_collection.add(
-                    uris=uris,
-                    metadatas=[{
-                        "email": str(id),
-                    }],
-                    ids=[str(id)+"I"+str(iid) for iid in range(len(uris))]
-                )
+        for id, (email, image_urls) in enumerate(zip(emails, image_urls)):
+            try:
+                if email.body is not None:
+                    merged_data = email.subject + " " + re.sub(r"[\n]", " ", email.body)
+                    email_collection.add(
+                        documents=[merged_data],
+                        metadatas=[{
+                            "from": email.from_,
+                            "to": email.to,
+                            "subject": email.subject,
+                            "body": email.body,
+                        }],
+                        ids=[str(id)]
+                    )
+
+                    for image_url in image_urls:
+                        try:
+                            uris = download_images([image_url])
+                            if len(uris) > 0:
+                                email_collection.add(
+                                    uris=uris,
+                                    metadatas=[{"email": str(id)}],
+                                    ids=[str(id) + "I" + str(iid) for iid in range(len(uris))]
+                                )
+                        except Exception as e:
+                            logging.error(f"Error downloading image: {e}")
+
+            except Exception as e:
+                logging.error(f"Error processing email {id}: {e}")
+
+        print("READY TO QUERY")
+        return True
+
+    except Exception as e:
+        logging.error(f"Critical error in initialize_live_data: {e}")
+        return False
 
 
 @app.get('/result')

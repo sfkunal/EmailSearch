@@ -10,12 +10,14 @@ import TypewriterTypography from './components/TypewriterTypography.js';
 import { GoogleLogin } from '@react-oauth/google';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { config } from './config.js';
+import Greeting from './components/Greeting.js';
 
 function MainPage() {
   const [searchResults, setSearchResults] = useState(null);
   const [languageModelResponse, setLanguageModelResponse] = useState(null);
   const [selectedEmail, setSelectedEmail] = useState(null);
   const [animationTrigger, setAnimationTrigger] = useState(0);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleEmailClick = (email) => {
     console.log('Clicked email:', email);
@@ -26,6 +28,10 @@ function MainPage() {
     const img = document.createElement('img');
     img.src = '/scopeLogo.jpg';
     img.className = 'topRightImage';
+    img.style.position = 'fixed';
+    img.style.top = '20px';
+    img.style.right = '20px';
+    img.style.zIndex = '9999';
     document.body.appendChild(img);
   };
 
@@ -40,23 +46,22 @@ function MainPage() {
   }, [searchResults]);
 
   const handleSuccess = (credentialResponse) => {
-    console.log("success", credentialResponse);
-    // Send the credential to your backend
-    fetch('http://localhost:5000/auth/google', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ credential: credentialResponse.credential, clientId: credentialResponse.clientId }),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        // Handle successful authentication (e.g., save token, redirect)
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+    console.log("Login Success", credentialResponse);
+    setIsAuthenticated(true);
+    // fetch('http://localhost:5000/auth/google', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ credential: credentialResponse.credential, clientId: credentialResponse.clientId }),
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log('Success:', data);
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error:', error);
+    //   });
   };
 
   const handleError = () => {
@@ -66,10 +71,7 @@ function MainPage() {
   return (
 
     <div className="MainPage">
-      <h1 style={{ color: 'white', textAlign: 'center', marginBottom: '50px' }}>
-        Good Evening, Alex
-      </h1>
-
+      <Greeting />
       <SearchBar setSearchResults={setSearchResults} setLanguageModelResponse={setLanguageModelResponse} />
 
       {searchResults?.metadatas && (
@@ -99,8 +101,8 @@ function MainPage() {
             marginTop: '25px',
             marginBottom: '25px',
             opacity: '0.6',
-            width: 'auto', // Set width to auto
-            display: 'inline-block', // Make it inline-block
+            width: 'auto',
+            display: 'inline-block',
           }}>
             <TypewriterTypography
               text={languageModelResponse}
@@ -120,20 +122,21 @@ function MainPage() {
           </Box>
         </div>
       )}
-      <div className="google-auth-container" style={{
-        left: '0',
-        right: '0',
-        margin: 'auto',
-      }}>
-        <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
-          <div>
-            <GoogleLogin
-              onSuccess={handleSuccess}
-              onError={handleError}
-            />
-          </div>
-        </GoogleOAuthProvider>
-      </div>
+      {!isAuthenticated && (
+        <div className="google-auth-container" style={{
+          left: '20px',
+          margin: 'auto',
+        }}>
+          <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
+            <div>
+              <GoogleLogin
+                onSuccess={handleSuccess}
+                onError={handleError}
+              />
+            </div>
+          </GoogleOAuthProvider>
+        </div>
+      )}
       <EmailModal isOpen={!!selectedEmail} onClose={() => setSelectedEmail(null)} content={selectedEmail} />
     </div>
   );
