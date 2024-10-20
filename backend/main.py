@@ -104,7 +104,7 @@ def synth_initialize():
 def initialize_live_data():
     try:
         print("STARTS")
-        emails, image_urls = gmail.get_emails(count=50)
+        emails, image_urls = gmail.get_emails(count=100)
         print(len(emails), len(image_urls))
         print("ENDS")
 
