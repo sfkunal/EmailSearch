@@ -185,7 +185,7 @@ class GmailAPI:
                 userId="me", id=message["id"], format="full").execute()["payload"]
             headers = payload["headers"]
             body = payload["body"]
-            # print(headers)
+            print(headers)
             data.append(
                 EmailData(
                     date=header_value(headers, "Date"),

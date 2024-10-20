@@ -120,6 +120,7 @@ def initialize_live_data():
                         "to": default(email.to),
                         "subject": default(email.subject),
                         "body": default(email.body),
+                        "date": default(email.date),
                     }],
                     ids=[str(id)]
                 )
@@ -136,6 +137,7 @@ def initialize_live_data():
                             "body": default(attachment.body),
                             "content_type": default(attachment.content_type),
                             "email_ref": str(id),
+                            "date": default(email.date),
                         }],
                         ids=[str(id) + "A" + str(iid)]
                     )
