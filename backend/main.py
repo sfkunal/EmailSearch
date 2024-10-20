@@ -108,6 +108,8 @@ def initialize_live_data():
         print(len(emails), len(image_urls))
         print("ENDS")
 
+        default = lambda x: "" if x is None else x
+
         for id, (email, image_urls) in enumerate(zip(emails, image_urls)):
             try:
                 if email.body is not None:
@@ -116,10 +118,10 @@ def initialize_live_data():
                     email_collection.upsert(
                         documents=[merged_data],
                         metadatas=[{
-                            "from": email.from_,
-                            "to": email.to,
-                            "subject": email.subject,
-                            "body": email.body,
+                            "from": default(email.from_),
+                            "to": default(email.to),
+                            "subject": default(email.subject),
+                            "body": default(email.body),
                         }],
                         ids=[str(id)]
                     )
@@ -130,12 +132,12 @@ def initialize_live_data():
                         email_collection.upsert(
                             documents=[attachment.body],
                             metadatas=[{
-                                "from": email.from_,
-                                "to": email.to,
-                                "subject": email.subject,
-                                "body": email.body,
+                                "from": default(email.from_),
+                                "to": default(email.to),
+                                "subject": default(email.subject),
+                                "body": default(email.body),
+                                "content_type": default(attachment.content_type),
                                 "email_ref": str(id),
-                                "content_type": attachment.content_type,
                             }],
                             ids=[str(id) + "A" + str(iid)]
                         )
