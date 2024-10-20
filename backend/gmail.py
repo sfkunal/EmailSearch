@@ -52,7 +52,7 @@ def process_html(html: str) -> tuple[str, list[str]]:
 
     html = re.sub(r"[\r\n\t]", " ", html)
     image_urls = re.findall(r'<img.*src="(?P<url>https?://[^\s]+)".*/?>', html)
-    html = re.sub(r"<style.*>.*</style>", " ", html)
+    html = re.sub(r"<style.*?>.*?</style>", " ", html)
     html = re.sub(r"<.*?>", r" ", html)
     html = html.replace("      ", " ")
 
@@ -60,6 +60,13 @@ def process_html(html: str) -> tuple[str, list[str]]:
         ".")[-1].lower() in ["png", "jpg", "gif", "tif", "bmp", "tiff"]]
 
     return html, image_urls
+
+
+def preprocess_emails(txt: str) -> str:
+    txt = re.sub(r"<?http(?s:.*?) >?", r"", txt)
+    txt = re.sub(r"&#?....;", r"", txt)
+    return txt
+    # html = re.sub(r"http(?s:.*?)$", r"", html)
 
 
 def decode_body(body: dict):
@@ -222,17 +229,23 @@ class GmailAPI:
                 email.body, attachment_img_urls = process_html(email.body)
                 img_urls += attachment_img_urls
                 # print("========", image_urls)
+            if email.body is not None: email.body = preprocess_emails(email.body)
+
+            
+            print("###### ATTACHMENTS:", len(email.attachments))
             for attachment in email.attachments:
                 if "text/html" in attachment.content_type:
                     attachment.body, attachment_img_urls = process_html(
                         attachment.body)
                     img_urls += attachment_img_urls
                     # print("<<<<<<<", image_urls)
+                if attachment.body is not None: attachment.body = preprocess_emails(attachment.body)
+            
             image_uris[i] += download_images(img_urls)
 
         print(image_uris)
-        with open("data.txt", "w") as fobj:
-            fobj.write(str(data))
+        with open("data.txt", "wb") as fobj:
+            fobj.write(str(data).encode())
         return data, image_uris
 
 

@@ -89,7 +89,7 @@ def synth_initialize():
         data = json.load(fobj)
         for id, d in enumerate(data):
             merged_data = d["subject"]+" "+re.sub(r"[\n]", " ", d["body"])
-            email_collection.add(
+            email_collection.upsert(
                 documents=[merged_data],  # we embed for you, or bring your own
                 metadatas=[{
                     "from": d["from"],
@@ -104,7 +104,8 @@ def synth_initialize():
 def initialize_live_data():
     try:
         print("STARTS")
-        emails, image_urls = gmail.get_emails(count=100)
+        emails, image_urls = gmail.get_emails(count=50)
+        print(len(emails), len(image_urls))
         print("ENDS")
 
         for id, (email, image_urls) in enumerate(zip(emails, image_urls)):
@@ -112,7 +113,7 @@ def initialize_live_data():
                 if email.body is not None:
                     merged_data = email.subject + " " + \
                         re.sub(r"[\n]", " ", email.body)
-                    email_collection.add(
+                    email_collection.upsert(
                         documents=[merged_data],
                         metadatas=[{
                             "from": email.from_,
@@ -123,18 +124,30 @@ def initialize_live_data():
                         ids=[str(id)]
                     )
 
-                    for image_url in image_urls:
-                        try:
-                            uris = download_images([image_url])
-                            if len(uris) > 0:
-                                email_collection.add(
-                                    uris=uris,
-                                    metadatas=[{"email": str(id)}],
-                                    ids=[str(id) + "I" + str(iid)
-                                         for iid in range(len(uris))]
-                                )
-                        except Exception as e:
-                            logging.error(f"Error downloading image: {e}")
+                # print("ATTACHMENTS:", len(email.attachments))
+                for iid, attachment in enumerate(email.attachments):
+                    if attachment.body is not None:
+                        email_collection.upsert(
+                            documents=[attachment.body],
+                            metadatas=[{
+                                "email_ref": str(id),
+                                "content_type": attachment.content_type,
+                            }],
+                            ids=[str(id) + "A" + str(iid)]
+                        )
+
+                for image_url in image_urls:
+                    try:
+                        uris = download_images([image_url])
+                        if len(uris) > 0:
+                            email_collection.add(
+                                uris=uris,
+                                metadatas=[{"email": str(id)}],
+                                ids=[str(id) + "I" + str(iid)
+                                        for iid in range(len(uris))]
+                            )
+                    except Exception as e:
+                        logging.error(f"Error downloading image: {e}")
 
             except Exception as e:
                 logging.error(f"Error processing email {id}: {e}")
@@ -207,6 +220,9 @@ def is_logged_in():
 @cross_origin()
 def login():
     auth_url = gmail.login()
+
+    if gmail.creds is not None:
+        initialize_live_data()
 
     if auth_url:
         return {"url": auth_url}
