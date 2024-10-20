@@ -39,6 +39,9 @@
     ],
     "directories": {
       "buildResources": "assets"
+    },
+    "mac": {
+      "icon": "resources/icon.icns"
     }
   },
   "eslintConfig": {

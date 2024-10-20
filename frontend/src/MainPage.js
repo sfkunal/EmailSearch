@@ -143,10 +143,10 @@ function MainPage() {
       )}
       {!isAuthenticated ? (
         <div className="google-auth-container" style={{
-          left: '20px',
+          left: '5px',
           margin: 'auto',
         }}>
-          <button onClick={() => handleSuccess({ credential: 'fake', clientId: 'fake' })}>Login</button>
+          <img src="loginLogo.png" alt="Login" onClick={() => handleSuccess({ credential: 'fake', clientId: 'fake' })} />
         </div>
       ) : (
         <div className="google-auth-container" style={{
