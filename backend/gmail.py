@@ -35,6 +35,9 @@ class EmailData:
 
 
 
+TEMP_IMG_PATH = Path("./backend/data/images/")
+
+
 def header_value(header: dict, header_name: str):
     try:
         ind = [e["name"] for e in header].index(header_name)
@@ -67,7 +70,7 @@ def decode_body(body: dict):
     
 
 def decode_and_save_attachments(body: dict, filename: str) -> str:
-    uri = Path("./backend/data/images/") / filename
+    uri = TEMP_IMG_PATH / filename
     if body.get("data", None) is not None:
         img = base64.urlsafe_b64decode(body["data"])
         with open(uri, "wb") as fobj:
@@ -80,7 +83,7 @@ def download_images(urls: list[str]) -> list[str]:
     for url in urls:
         try:
             img_data = requests.get(url).content
-            local_path = Path("./backend/data/images/") / Path(url).parts[-1]
+            local_path = TEMP_IMG_PATH / Path(url).parts[-1]
             with open(local_path, "wb") as fobj:
                 fobj.write(img_data)
             result.append(str(local_path))

@@ -11,10 +11,9 @@ import logging
 import json
 import re
 import configparser
-import requests
-from pathlib import Path
 
-from gmail import GmailAPI
+from gmail import GmailAPI, download_images
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -37,18 +36,7 @@ gmail = GmailAPI()
 
 
 
-def download_images(urls: list[str]) -> list[str]:
-    result = []
-    for url in urls:
-        try:
-            img_data = requests.get(url).content
-            local_path = Path("./backend/data/images/") / Path(url).parts[-1]
-            with open(local_path, "wb") as fobj:
-                fobj.write(img_data)
-            result.append(str(local_path))
-        except:
-            pass
-    return result
+
 
 
 embedder = SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
