@@ -2,6 +2,7 @@ import os.path
 from pathlib import Path
 
 from flask import url_for
+import requests
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google.oauth2 import id_token
@@ -52,6 +53,8 @@ def process_html(html: str) -> tuple[str, list[str]]:  # (processed content, ima
     html = re.sub(r"<style.*>.*</style>", " ", html)
     html = re.sub(r"<.*?>", r" ", html)
     html = html.replace("      ", " ")
+
+    image_urls = [image_url for image_url in image_urls if image_url.split(".")[-1].lower() in ["png", "jpg", "gif", "tif", "bmp", "tiff"]]
     
     return html, image_urls
     
@@ -63,11 +66,27 @@ def decode_body(body: dict):
         return value
     
 
-def decode_and_save_attachments(body: dict, file_path: Path):
+def decode_and_save_attachments(body: dict, filename: str) -> str:
+    uri = Path("./backend/data/images/") / filename
     if body.get("data", None) is not None:
         img = base64.urlsafe_b64decode(body["data"])
-        with open(file_path, "wb") as fobj:
+        with open(uri, "wb") as fobj:
             fobj.write(img)
+    return str(uri)
+
+
+def download_images(urls: list[str]) -> list[str]:
+    result = []
+    for url in urls:
+        try:
+            img_data = requests.get(url).content
+            local_path = Path("./backend/data/images/") / Path(url).parts[-1]
+            with open(local_path, "wb") as fobj:
+                fobj.write(img_data)
+            result.append(str(local_path))
+        except:
+            pass
+    return result
 
 
 class GmailAPI:
@@ -80,7 +99,7 @@ class GmailAPI:
         self.service = None
         
     def login(self) -> str:
-        print("LOGIN?")
+        # print("LOGIN?")
         auth_url = ""
 
         # The file token.json stores the user's access and refresh tokens, and is
@@ -135,9 +154,12 @@ class GmailAPI:
     def get_emails(self, count = 100) -> tuple[list[EmailData], list[str]]:
         current_user = self.service.users().messages().list(userId="me", maxResults=count).execute()
         messages = current_user.get("messages", [])
+        image_uris = []
 
         data = []
         for message in messages:
+            image_uris.append([])
+
             payload = self.service.users().messages().get(userId="me", id=message["id"], format="full").execute()["payload"]
             headers = payload["headers"]
             body = payload["body"]
@@ -165,7 +187,9 @@ class GmailAPI:
                         # print(headers)
                         attachment_id = part["body"]["attachmentId"]
                         attachment_ref = self.service.users().messages().attachments().get(userId="me", messageId=data[-1].message_id, id=attachment_id).execute()
-                        decode_and_save_attachments(attachment_ref, Path("./backend/data/images/") / part["filename"])
+
+                        uri = decode_and_save_attachments(attachment_ref, part["filename"])
+                        image_uris[-1].append(uri)
 
                     body = part["body"]
                     data[-1].attachments.append(
@@ -175,21 +199,21 @@ class GmailAPI:
                         )
                     )
 
-        all_image_urls = []
-        for email in data:
-            all_image_urls.append([])
+        for i, email in enumerate(data):
+            img_urls = []
             if "text/html" in email.content_type:
-                email.body, image_urls = process_html(email.body)
-                all_image_urls[-1].append(image_urls)
+                email.body, attachment_img_urls = process_html(email.body)
+                img_urls += attachment_img_urls
                 # print("========", image_urls)
             for attachment in email.attachments:
                 if "text/html" in attachment.content_type:
-                    attachment.body, image_urls = process_html(attachment.body)
-                    all_image_urls[-1].append(image_urls)
+                    attachment.body, attachment_img_urls = process_html(attachment.body)
+                    img_urls += attachment_img_urls
                     # print("<<<<<<<", image_urls)
+            image_uris[i] += download_images(img_urls)
 
-        print(all_image_urls)
-        return data, all_image_urls
+        print(image_uris)
+        return data, image_uris
 
 
 def debug_generate_token_json():
@@ -205,11 +229,12 @@ def debug_generate_token_json():
 
 
 if __name__ == "__main__":
-    debug_generate_token_json()
+    # debug_generate_token_json()
     
-    # gmail = GmailAPI()
-    # emails, image_urls = gmail.get_emails(count=3)
-    # for mail, image_urls in zip(emails, image_urls):
-    #     print(image_urls)
-    #     print()
+    gmail = GmailAPI()
+    gmail.login()
+    emails, image_urls = gmail.get_emails(count=50)
+    for mail, image_urls in zip(emails, image_urls):
+        print(image_urls)
+        print()
 
