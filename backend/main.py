@@ -206,15 +206,13 @@ def ai_message():
     return {"response": response}
 
 
-auth_state = None
-cred = None
-
 @app.route("/login")
 def login():
     auth_url = gmail.login()
 
     if auth_url:
         return redirect(auth_url)
+    return {}
 
 @app.route("/callback")
 def callback():
@@ -226,13 +224,6 @@ def callback():
     initialize_live_data()
 
     return redirect(url_for("index"))
-
-# @app.post("/login")
-# def login():
-#     body_json = request.get_json()
-#     creds = body_json.get("credential")
-#     client_id = body_json.get("clientId")
-
 
 # synth_initialize()
 # initialize_live_data()

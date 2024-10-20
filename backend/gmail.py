@@ -80,7 +80,8 @@ class GmailAPI:
         self.service = None
         
     def login(self) -> str:
-        auth_url = None
+        print("LOGIN?")
+        auth_url = ""
 
         # The file token.json stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
@@ -104,12 +105,13 @@ class GmailAPI:
                     prompt='select_account'
                 )
                 print(self.auth_state)
-            # Save the credentials for the next run
-            with open("token.json", "w") as token:
-                token.write(self.creds.to_json())
+            
+            if self.creds:
+                # Save the credentials for the next run
+                with open("token.json", "w") as token:
+                    token.write(self.creds.to_json())
 
-            if auth_url: return auth_url
-            return None
+        return auth_url
         
     def login_callback(self, auth_resp):
         flow = InstalledAppFlow.from_client_secrets_file(
@@ -190,10 +192,24 @@ class GmailAPI:
         return data, all_image_urls
 
 
+def debug_generate_token_json():
+    flow = InstalledAppFlow.from_client_secrets_file(
+        "credentials.json", GmailAPI.SCOPES
+    )
+    creds = flow.run_local_server(port=0)
+    
+    if creds:
+        # Save the credentials for the next run
+        with open("token.json", "w") as token:
+            token.write(creds.to_json())
+
+
 if __name__ == "__main__":
-    gmail = GmailAPI()
-    emails, image_urls = gmail.get_emails(count=3)
-    for mail, image_urls in zip(emails, image_urls):
-        print(image_urls)
-        print()
+    debug_generate_token_json()
+    
+    # gmail = GmailAPI()
+    # emails, image_urls = gmail.get_emails(count=3)
+    # for mail, image_urls in zip(emails, image_urls):
+    #     print(image_urls)
+    #     print()
 
