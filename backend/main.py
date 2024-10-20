@@ -16,10 +16,6 @@ from pathlib import Path
 from backend.gmail import GmailAPI
 
 
-# If modifying these scopes, delete the file token.json.
-SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
-
-
 CONFIG = configparser.ConfigParser()
 CONFIG.read("TOKENS.ini")
 
@@ -199,34 +195,19 @@ cred = None
 
 @app.route("/login")
 def login():
-    global auth_state
+    auth_url = gmail.login()
 
-    flow = InstalledAppFlow.from_client_secrets_file(
-        "credentials.json", SCOPES
-    )
-    flow.redirect_uri = url_for('callback', _external=True)
-    authorization_url, auth_state = flow.authorization_url(
-        access_type='offline',
-        prompt='select_account')
-    
-    print(auth_state)
-    
-    return redirect(authorization_url)
+    if auth_url:
+        return redirect(auth_url)
 
 @app.route("/callback")
 def callback():
-    global cred
-
-    if request.args.get('state') != auth_state:
+    if request.args.get('state') != gmail.auth_state:
         raise Exception('Invalid state')
     
-    flow = InstalledAppFlow.from_client_secrets_file(
-        "credentials.json", scopes=SCOPES, state=auth_state)
-    flow.redirect_uri = url_for('callback', _external=True)
+    gmail.login_callback(request.url)
 
-    authorization_response = request.url
-    flow.fetch_token(authorization_response=authorization_response)
-    cred = flow.credentials
+    initialize_live_data()
 
     return redirect(url_for("index"))
 
@@ -238,4 +219,4 @@ def callback():
 
 
 # synth_initialize()
-initialize_live_data()
+# initialize_live_data()

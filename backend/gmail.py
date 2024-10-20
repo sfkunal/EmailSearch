@@ -1,6 +1,7 @@
 import os.path
 from pathlib import Path
 
+from flask import url_for
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google.oauth2 import id_token
@@ -12,9 +13,6 @@ import base64
 import re
 from dataclasses import dataclass
 
-
-# If modifying these scopes, delete the file token.json.
-SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
 
 
 @dataclass
@@ -73,26 +71,57 @@ def decode_and_save_attachments(body: dict, file_path: Path):
 
 
 class GmailAPI:
+    # If modifying these scopes, delete the file token.json.
+    SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
+
     def __init__(self):
+        self.auth_state = None
         self.creds = None
+        self.service = None
+        
+    def login(self) -> str:
+        auth_url = None
+
         # The file token.json stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
         # time.
         if os.path.exists("token.json"):
-            self.creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+            self.creds = Credentials.from_authorized_user_file("token.json", self.SCOPES)
+            self.instantiate()
+        
         # If there are no (valid) credentials available, let the user log in.
         if not self.creds or not self.creds.valid:
             if self.creds and self.creds.expired and self.creds.refresh_token:
                 self.creds.refresh(Request())
+                self.instantiate()
             else:
-                self.flow = InstalledAppFlow.from_client_secrets_file(
-                    "credentials.json", SCOPES
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    "credentials.json", GmailAPI.SCOPES
                 )
-                self.creds = self.flow.run_local_server(port=0)
+                flow.redirect_uri = url_for('callback', _external=True)
+                auth_url, self.auth_state = flow.authorization_url(
+                    access_type='offline',
+                    prompt='select_account'
+                )
+                print(self.auth_state)
             # Save the credentials for the next run
             with open("token.json", "w") as token:
                 token.write(self.creds.to_json())
 
+            if auth_url: return auth_url
+            return None
+        
+    def login_callback(self, auth_resp):
+        flow = InstalledAppFlow.from_client_secrets_file(
+            "credentials.json", scopes=GmailAPI.SCOPES, state=self.auth_state)
+        flow.redirect_uri = url_for('callback', _external=True)
+
+        flow.fetch_token(authorization_response=auth_resp)
+        self.creds = flow.credentials
+
+        self.instantiate()
+
+    def instantiate(self):
         try:
             # Call the Gmail API
             self.service = build("gmail", "v1", credentials=self.creds)
@@ -100,12 +129,6 @@ class GmailAPI:
         except HttpError as error:
             print(f"Error in loading Gmail API service: {error}")
 
-    def login(self):
-        self.flow = InstalledAppFlow()
-        """
-
-        
-        """
 
     def get_emails(self, count = 100) -> tuple[list[EmailData], list[str]]:
         current_user = self.service.users().messages().list(userId="me", maxResults=count).execute()
