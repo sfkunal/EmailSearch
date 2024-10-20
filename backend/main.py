@@ -1,9 +1,11 @@
-from flask import Flask, request
+from flask import Flask, redirect, request, url_for
 from flask_cors import CORS, cross_origin
 import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction, OpenCLIPEmbeddingFunction
 from chromadb.utils.data_loaders import ImageLoader
 from groq import Groq
+
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 import json
 import re
@@ -11,7 +13,12 @@ import configparser
 import requests
 from pathlib import Path
 
-from api import GmailAPI
+from backend.gmail import GmailAPI
+
+
+# If modifying these scopes, delete the file token.json.
+SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
+
 
 CONFIG = configparser.ConfigParser()
 CONFIG.read("TOKENS.ini")
@@ -186,6 +193,42 @@ def ai_message():
 
     return {"response": response}
 
+
+auth_state = None
+cred = None
+
+@app.route("/login")
+def login():
+    global auth_state
+
+    flow = InstalledAppFlow.from_client_secrets_file(
+        "credentials.json", SCOPES
+    )
+    flow.redirect_uri = url_for('callback', _external=True)
+    authorization_url, auth_state = flow.authorization_url(
+        access_type='offline',
+        prompt='select_account')
+    
+    print(auth_state)
+    
+    return redirect(authorization_url)
+
+@app.route("/callback")
+def callback():
+    global cred
+
+    if request.args.get('state') != auth_state:
+        raise Exception('Invalid state')
+    
+    flow = InstalledAppFlow.from_client_secrets_file(
+        "credentials.json", scopes=SCOPES, state=auth_state)
+    flow.redirect_uri = url_for('callback', _external=True)
+
+    authorization_response = request.url
+    flow.fetch_token(authorization_response=authorization_response)
+    cred = flow.credentials
+
+    return redirect(url_for("index"))
 
 # @app.post("/login")
 # def login():
