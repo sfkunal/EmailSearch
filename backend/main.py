@@ -13,7 +13,7 @@ import configparser
 import requests
 from pathlib import Path
 
-from backend.gmail import GmailAPI
+from gmail import GmailAPI
 
 
 CONFIG = configparser.ConfigParser()
